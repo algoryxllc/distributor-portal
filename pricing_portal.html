@@ -104,6 +104,10 @@ tr:hover td{background:rgba(99,102,241,0.03);}
 .export-card p{font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.5;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+.frow{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:8px 10px;}
+.flabel{font-size:9px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.fval{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;}
 </style>
 </head>
 <body>
@@ -141,15 +145,17 @@ tr:hover td{background:rgba(99,102,241,0.03);}
     <div class="stat-card"><div class="slabel">Reservations</div><div class="svalue" id="s-res">0</div><div class="ssub">On hold</div></div>
     <div class="stat-card"><div class="slabel">Last Updated</div><div class="svalue" style="font-size:10px;margin-top:6px" id="s-last">Never</div></div>
   </div>
-  <div class="card">
-    <div class="card-title">// Low Stock Alerts (Below 5 Units)</div>
-    <div class="table-wrap"><table><thead><tr><th>sku</th><th>quantity</th></tr></thead><tbody id="t-ls"></tbody></table></div>
-    <div class="pagination" id="pg-ls"></div>
-  </div>
-  <div class="card">
-    <div class="card-title">// Recent Price Changes</div>
-    <div class="table-wrap"><table><thead><tr><th>sku</th><th>old cog</th><th>new cog</th><th>diff</th><th>changed at</th></tr></thead><tbody id="t-rc"></tbody></table></div>
-    <div class="pagination" id="pg-rc"></div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px">
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">// low stock (below 5)</div>
+      <div class="table-wrap"><table><thead><tr><th>sku</th><th>qty</th></tr></thead><tbody id="t-ls"></tbody></table></div>
+      <div class="pagination" id="pg-ls"></div>
+    </div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title">// recent price changes</div>
+      <div class="table-wrap"><table><thead><tr><th>sku</th><th>old</th><th>new</th><th>diff</th><th>at</th></tr></thead><tbody id="t-rc"></tbody></table></div>
+      <div class="pagination" id="pg-rc"></div>
+    </div>
   </div>
 </div>
 
@@ -398,10 +404,12 @@ function calcAll(s){
   var shipping = parseFloat(s.shipping||0);
   // referral is stored as percentage like 8 meaning 8%
   var reffPct = parseFloat(s.referral||0);
+  // Handle if referral is decimal (0.08) vs percent (8) - normalize to percent
+  if(reffPct > 0 && reffPct < 1) reffPct = reffPct * 100;
   var reff = reffPct / 100;
 
   s.totalCog = Math.round((cog + handling + shipping)*100)/100;
-  s.be = reff < 1 ? Math.round(((0.01 * s.totalCog) / (1 - reff) * 100)*10000)/10000 : 0;
+  s.be = reff < 1 && reff > 0 ? (0.01 * s.totalCog) / (1 - reff) * 100 : s.totalCog;
   s.minPrice = r99(s.be + s.be * 0.01);
   s.sellerPrice = r99(s.be + s.be * 0.02);
   s.maxPrice = r99(s.sellerPrice * 2);
@@ -416,7 +424,7 @@ function calcAll(s){
 
 function r99(v){
   if(v<=0) return 0;
-  return parseFloat((Math.ceil(v) - 0.01).toFixed(2));
+  return Math.ceil(v * 100) / 100;
 }
 
 function fmt(n){ return '$'+parseFloat(n||0).toFixed(2); }
@@ -884,9 +892,136 @@ function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(function(m){m.classList.remove('open');});});
 
+
+var currentEditSku = null;
+
+function openEdit(lsku){
+  currentEditSku = lsku;
+  var s = skus.find(function(s){return s.listedSku===lsku;});
+  if(!s) return;
+  document.getElementById('edit-sku-lbl').textContent = 'editing: ' + lsku;
+  document.getElementById('e-disti').value = s.disti||'';
+  document.getElementById('e-vendor').value = s.vendor||'';
+  document.getElementById('e-dsku').value = s.distiSku||'';
+  document.getElementById('e-msku').value = s.mfrSku||'';
+  document.getElementById('e-asin').value = s.asin||'';
+  document.getElementById('e-qty').value = s.quantity||0;
+  document.getElementById('e-cog').value = s.cog||0;
+  document.getElementById('e-handling').value = s.handling||0;
+  document.getElementById('e-shipping').value = s.shipping||0;
+  document.getElementById('e-reff').value = s.referral||0;
+  document.getElementById('e-sg').value = s.shippingGroup||'';
+  liveCalc();
+  openModal('modal-edit');
+}
+
+function liveCalc(){
+  var cog = parseFloat(document.getElementById('e-cog').value||0);
+  var handling = parseFloat(document.getElementById('e-handling').value||0);
+  var shipping = parseFloat(document.getElementById('e-shipping').value||0);
+  var reffPct = parseFloat(document.getElementById('e-reff').value||0);
+  if(reffPct>0&&reffPct<1) reffPct=reffPct*100;
+  var reff = reffPct/100;
+  var totalCog = Math.round((cog+handling+shipping)*100)/100;
+  var be = reff<1&&reff>0 ? (0.01*totalCog)/(1-reff)*100 : totalCog;
+  var minP = Math.ceil((be+be*0.01)*100)/100;
+  var sp = Math.ceil((be+be*0.02)*100)/100;
+  var maxP = Math.ceil(sp*2*100)/100;
+  var gpMin = Math.round((minP-minP*reff-totalCog)*100)/100;
+  var gpSP = Math.round((sp-sp*reff-totalCog)*100)/100;
+
+  document.getElementById('f-totalcog').textContent = '$'+totalCog.toFixed(2);
+  document.getElementById('f-be').textContent = '$'+be.toFixed(2);
+  document.getElementById('f-min').textContent = '$'+minP.toFixed(2);
+  document.getElementById('f-sp').textContent = '$'+sp.toFixed(2);
+  document.getElementById('f-max').textContent = '$'+maxP.toFixed(2);
+  document.getElementById('f-biz').textContent = '$'+sp.toFixed(2);
+  document.getElementById('f-gpmin').style.color = gpMin>=0?'var(--success)':'var(--error)';
+  document.getElementById('f-gpmin').textContent = '$'+gpMin.toFixed(2);
+  document.getElementById('f-gpsp').style.color = gpSP>=0?'var(--success)':'var(--error)';
+  document.getElementById('f-gpsp').textContent = '$'+gpSP.toFixed(2);
+}
+
+function saveEdit(){
+  var s = skus.find(function(x){return x.listedSku===currentEditSku;});
+  if(!s) return;
+  var reff = parseFloat(document.getElementById('e-reff').value||0);
+  if(reff>0&&reff<1) reff=reff*100;
+  var oldCog = s.cog;
+  var newCog = parseFloat(document.getElementById('e-cog').value||0);
+  s.disti = document.getElementById('e-disti').value;
+  s.vendor = document.getElementById('e-vendor').value;
+  s.distiSku = document.getElementById('e-dsku').value;
+  s.mfrSku = document.getElementById('e-msku').value;
+  s.asin = document.getElementById('e-asin').value;
+  s.quantity = parseInt(document.getElementById('e-qty').value||0);
+  s.cog = newCog;
+  s.newCog = newCog;
+  s.handling = parseFloat(document.getElementById('e-handling').value||0);
+  s.shipping = parseFloat(document.getElementById('e-shipping').value||0);
+  s.referral = reff;
+  s.shippingGroup = document.getElementById('e-sg').value;
+  s.updatedAt = new Date().toLocaleString();
+  if(Math.abs(oldCog-newCog)>0.001){
+    priceLog.push({changedAt:new Date().toLocaleString(),listedSku:s.listedSku,mfrSku:s.mfrSku,disti:s.disti,oldCog:oldCog,newCog:newCog});
+  }
+  calcAll(s);
+  save();closeModal('modal-edit');catalogFiltered=[...skus];renderCatalog();
+  alert('✅ sku updated!');
+}
+
 // INIT
 catalogFiltered=[...skus];
 updateBadges();checkTimer();refreshDashboard();
 </script>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal" style="max-width:620px">
+    <div class="modal-close" onclick="closeModal('modal-edit')">✕</div>
+    <h2>✏️ edit sku</h2>
+    <p id="edit-sku-lbl" style="color:var(--accent);font-size:12px;margin-bottom:12px"></p>
+    <div class="fr2">
+      <div class="form-group"><label>disti</label><input type="text" id="e-disti"/></div>
+      <div class="form-group"><label>vendor</label><input type="text" id="e-vendor"/></div>
+    </div>
+    <div class="fr2">
+      <div class="form-group"><label>disti sku</label><input type="text" id="e-dsku"/></div>
+      <div class="form-group"><label>mfr sku</label><input type="text" id="e-msku"/></div>
+    </div>
+    <div class="fr2">
+      <div class="form-group"><label>asin</label><input type="text" id="e-asin"/></div>
+      <div class="form-group"><label>quantity</label><input type="number" id="e-qty"/></div>
+    </div>
+    <div class="fr3">
+      <div class="form-group"><label>cog ($)</label><input type="number" id="e-cog" step="0.01" oninput="liveCalc()"/></div>
+      <div class="form-group"><label>handling ($)</label><input type="number" id="e-handling" step="0.01" oninput="liveCalc()"/></div>
+      <div class="form-group"><label>shipping ($)</label><input type="number" id="e-shipping" step="0.01" oninput="liveCalc()"/></div>
+    </div>
+    <div class="fr2">
+      <div class="form-group"><label>referral (%)</label><input type="number" id="e-reff" step="0.1" placeholder="e.g. 8" oninput="liveCalc()"/></div>
+      <div class="form-group"><label>shipping group</label><input type="text" id="e-sg"/></div>
+    </div>
+    <!-- LIVE FORMULA PREVIEW -->
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px;margin-top:4px;margin-bottom:14px">
+      <div style="font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px">// formula preview</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px" id="formula-preview">
+        <div class="frow"><div class="flabel">total cog</div><div class="fval" id="f-totalcog">$0.00</div></div>
+        <div class="frow"><div class="flabel">breakeven</div><div class="fval" id="f-be">$0.00</div></div>
+        <div class="frow"><div class="flabel">min price</div><div class="fval ca" id="f-min">$0.00</div></div>
+        <div class="frow"><div class="flabel">seller price</div><div class="fval ca" id="f-sp">$0.00</div></div>
+        <div class="frow"><div class="flabel">max price</div><div class="fval" id="f-max">$0.00</div></div>
+        <div class="frow"><div class="flabel">business price</div><div class="fval" id="f-biz">$0.00</div></div>
+        <div class="frow"><div class="flabel">gp min</div><div class="fval" id="f-gpmin">$0.00</div></div>
+        <div class="frow"><div class="flabel">gp sp</div><div class="fval" id="f-gpsp">$0.00</div></div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-g" onclick="closeModal('modal-edit')">cancel</button>
+      <button class="btn btn-p" onclick="saveEdit()">save changes</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
