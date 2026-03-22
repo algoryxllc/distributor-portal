@@ -420,6 +420,63 @@
   .btn-start:hover { opacity: 0.9; }
   .btn-start:disabled { opacity: 0.5; cursor: not-allowed; }
 
+
+  /* Fetch All Button */
+  .fetch-all-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding: 20px 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+  }
+
+  .btn-fetch-all {
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--success), var(--accent));
+    color: #000;
+    font-family: "Syne", sans-serif;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-fetch-all:hover { opacity: 0.9; transform: scale(0.98); }
+  .btn-fetch-all:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+  .fetch-all-desc {
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  /* Status Badge on card */
+  .card-status-badge {
+    display: none;
+    font-family: "DM Mono", monospace;
+    font-size: 11px;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .card-status-badge.visible { display: flex; }
+  .card-status-badge.running { background: rgba(0,229,255,0.1); color: var(--accent); border: 1px solid rgba(0,229,255,0.2); }
+  .card-status-badge.success { background: rgba(0,255,136,0.1); color: var(--success); border: 1px solid rgba(0,255,136,0.2); }
+  .card-status-badge.failed { background: rgba(255,68,102,0.1); color: var(--error); border: 1px solid rgba(255,68,102,0.2); }
+
 </style>
 </head>
 <body>
@@ -436,6 +493,16 @@
       </div>
     </div>
   </header>
+
+  <div class="fetch-all-wrap">
+    <button class="btn-fetch-all" id="fetch-all-btn" onclick="fetchAll()">
+      ⚡ Fetch All Distributors
+    </button>
+    <div class="fetch-all-desc">
+      Fetches MA Labs + 888VoIP simultaneously.<br>
+      Arrow Electronics requires SKUs — use individual fetch.
+    </div>
+  </div>
 
   <p class="section-title">// Connected Distributors</p>
 
@@ -466,6 +533,7 @@
         </button>
       </div>
       <div class="status-msg" id="malabs-status"></div>
+      <div class="card-status-badge" id="malabs-badge"></div>
     </div>
 
     <!-- ARROW -->
@@ -486,19 +554,21 @@
     </div>
 
     <!-- AVNET -->
-    <div class="distributor-card coming-soon">
+    <div class="distributor-card active">
       <div class="card-header">
         <div class="card-logo ingram">AV</div>
-        <div class="card-badge badge-soon">Not Connected</div>
+        <div class="card-badge badge-connected">● Connected</div>
       </div>
       <div class="card-name">Avnet</div>
-      <div class="card-desc">API Access Required</div>
+      <div class="card-desc">OAuth2 · REST API · Pricing & Availability</div>
       <div class="card-stats">
-        <div class="stat"><div class="stat-value">—</div><div class="stat-label">Total Items</div></div>
+        <div class="stat"><div class="stat-value">SKU</div><div class="stat-label">Search Mode</div></div>
       </div>
       <div class="card-actions">
-        <button class="btn btn-fetch" disabled>🔒 Not Connected</button>
+        <button class="btn btn-fetch" onclick="openAvnetPanel()">⬇ Fetch by SKUs</button>
       </div>
+      <div class="status-msg" id="avnet-status"></div>
+      <div class="card-status-badge" id="avnet-badge"></div>
     </div>
 
     <!-- SCANSOURCE -->
@@ -548,17 +618,13 @@
         <button class="btn btn-fetch" onclick="fetchVoip()">⬇ Fetch Catalog</button>
       </div>
       <div class="status-msg" id="voip-status"></div>
+      <div class="card-status-badge" id="voip-badge"></div>
     </div>
 
   </div>
 
   <p class="section-title">// Activity Log</p>
-  <div class="log-box" id="log-box">
-    <div class="log-entry info">[SYSTEM] Distributor Portal initialized...</div>
-    <div class="log-entry">[SYSTEM] MA Labs API — Ready (18,036 items)</div>
-    <div class="log-entry">[SYSTEM] Click "Fetch Catalog" to start GitHub Actions job</div>
-    <div class="log-entry">[SYSTEM] Download Excel from GitHub Actions when job completes</div>
-  </div>
+  <div class="log-box" id="log-box"></div>
 
 </div>
 
@@ -567,75 +633,161 @@
 </footer>
 
 <script>
+
+  // =============================================
   const GITHUB_OWNER = "algoryxllc";
   const GITHUB_REPO = "distributor-backend";
-  const WORKFLOW_FILE = "fetch_malabs.yml";
+  // =============================================
+
+  // Dynamic log - persists in session
+  const logHistory = JSON.parse(sessionStorage.getItem("logHistory") || "[]");
 
   function log(msg, type = "") {
     const box = document.getElementById("log-box");
-    const entry = document.createElement("div");
-    entry.className = `log-entry ${type}`;
-    const time = new Date().toLocaleTimeString();
-    entry.textContent = `[${time}] ${msg}`;
-    box.appendChild(entry);
+    const time = new Date().toLocaleString();
+    const entry = { time, msg, type };
+    logHistory.push(entry);
+    sessionStorage.setItem("logHistory", JSON.stringify(logHistory.slice(-100)));
+    const div = document.createElement("div");
+    div.className = `log-entry ${type}`;
+    div.textContent = `[${time}] ${msg}`;
+    box.appendChild(div);
     box.scrollTop = box.scrollHeight;
   }
 
-  async function fetchMaLabs() {
-    const btn = document.getElementById("malabs-fetch-btn");
-    const spinner = document.getElementById("malabs-spinner");
-    const btnText = document.getElementById("malabs-btn-text");
-    const statusMsg = document.getElementById("malabs-status");
-
-    // Ask for token via popup - never stored in code
-    const GITHUB_TOKEN = prompt("🔑 Enter your GitHub Personal Access Token:");
-    if (!GITHUB_TOKEN) {
-      log("MA Labs — Cancelled. No token provided.", "error");
-      return;
+  function renderLog() {
+    const box = document.getElementById("log-box");
+    box.innerHTML = "";
+    if (logHistory.length === 0) {
+      const div = document.createElement("div");
+      div.className = "log-entry info";
+      div.textContent = "[SYSTEM] Distributor Portal initialized...";
+      box.appendChild(div);
+    } else {
+      logHistory.forEach(e => {
+        const div = document.createElement("div");
+        div.className = `log-entry ${e.type}`;
+        div.textContent = `[${e.time}] ${e.msg}`;
+        box.appendChild(div);
+      });
     }
-
-    btn.disabled = true;
-    spinner.classList.add("visible");
-    btnText.textContent = "Starting...";
-    statusMsg.className = "status-msg visible running";
-    statusMsg.textContent = "Starting GitHub Actions job...";
-    log("MA Labs — Triggering GitHub Actions workflow...", "info");
-
-    try {
-      const response = await fetch(
-        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${WORKFLOW_FILE}/dispatches`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${GITHUB_TOKEN}`,
-            "Accept": "application/vnd.github+json",
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({ ref: "main", inputs: { confirm: "YES" } })
-        }
-      );
-
-      if (response.status === 204) {
-        log("MA Labs — GitHub Actions job started successfully! ✓", "success");
-        statusMsg.className = "status-msg visible success";
-        statusMsg.innerHTML = `✓ Job started! Go to <a href="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/actions" target="_blank" style="color:var(--accent)">GitHub Actions</a> to monitor progress.<br>Download Excel from there when job completes (10-15 mins).`;
-        btnText.textContent = "✓ Job Started!";
-      } else {
-        throw new Error(`GitHub API error: ${response.status}`);
-      }
-
-    } catch (err) {
-      log(`MA Labs — Error: ${err.message}`, "error");
-      statusMsg.className = "status-msg visible error";
-      statusMsg.textContent = `Error: ${err.message}`;
-      btnText.textContent = "⬇ Retry Fetch";
-      btn.disabled = false;
-    }
-
-    spinner.classList.remove("visible");
+    box.scrollTop = box.scrollHeight;
   }
 
-  function openArrowPanel() {
+  function setBadge(id, status, msg) {
+    const badge = document.getElementById(id);
+    if (!badge) return;
+    badge.className = `card-status-badge visible ${status}`;
+    const icons = { running: "⏳", success: "✅", failed: "❌" };
+    badge.textContent = `${icons[status] || ""} ${msg}`;
+  }
+
+  async function triggerWorkflow(workflowFile, token, inputs = {}) {
+    const response = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${workflowFile}/dispatches`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`,
+          "Accept": "application/vnd.github+json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ ref: "main", inputs: { confirm: "YES", ...inputs } })
+      }
+    );
+    return response.status === 204;
+  }
+
+  async function checkJobStatus(token, workflowFile, badgeId, name) {
+    try {
+      const res = await fetch(
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/${workflowFile}/runs?per_page=1`,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Accept": "application/vnd.github+json"
+          }
+        }
+      );
+      const data = await res.json();
+      const run = data.workflow_runs?.[0];
+      if (!run) return;
+
+      if (run.status === "in_progress" || run.status === "queued") {
+        setBadge(badgeId, "running", "Job running...");
+        log(`${name} — Job is running on GitHub Actions...`, "info");
+        setTimeout(() => checkJobStatus(token, workflowFile, badgeId, name), 15000);
+      } else if (run.conclusion === "success") {
+        setBadge(badgeId, "success", `✓ Done! Download from GitHub Actions`);
+        log(`${name} — Fetch completed successfully! Download Excel from GitHub Actions.`, "success");
+      } else if (run.conclusion === "failure") {
+        setBadge(badgeId, "failed", "Failed! Check GitHub Actions");
+        log(`${name} — Fetch failed! Check GitHub Actions for details.`, "error");
+      }
+    } catch(e) {
+      console.error(e);
+    }
+  }
+
+  async function fetchMaLabs(token) {
+    if (!token) token = prompt("🔑 Enter your GitHub Personal Access Token:");
+    if (!token) return false;
+
+    setBadge("malabs-badge", "running", "Starting...");
+    log("MA Labs — Triggering GitHub Actions workflow...", "info");
+
+    const ok = await triggerWorkflow("fetch_malabs.yml", token);
+    if (ok) {
+      log("MA Labs — Job started! Monitoring status...", "success");
+      setTimeout(() => checkJobStatus(token, "fetch_malabs.yml", "malabs-badge", "MA Labs"), 5000);
+      return true;
+    } else {
+      setBadge("malabs-badge", "failed", "Failed to start!");
+      log("MA Labs — Failed to trigger job!", "error");
+      return false;
+    }
+  }
+
+  async function fetchVoip(token) {
+    if (!token) token = prompt("🔑 Enter your GitHub Personal Access Token:");
+    if (!token) return false;
+
+    setBadge("voip-badge", "running", "Starting...");
+    log("888VoIP — Triggering GitHub Actions workflow...", "info");
+
+    const ok = await triggerWorkflow("fetch_voip.yml", token);
+    if (ok) {
+      log("888VoIP — Job started! Monitoring status...", "success");
+      setTimeout(() => checkJobStatus(token, "fetch_voip.yml", "voip-badge", "888VoIP"), 5000);
+      return true;
+    } else {
+      setBadge("voip-badge", "failed", "Failed to start!");
+      log("888VoIP — Failed to trigger job!", "error");
+      return false;
+    }
+  }
+
+  async function fetchAll() {
+    const token = prompt("🔑 Enter your GitHub Personal Access Token:
+(Used for all distributors this session)");
+    if (!token) return;
+
+    const btn = document.getElementById("fetch-all-btn");
+    btn.disabled = true;
+    btn.textContent = "⏳ Fetching All...";
+    log("FETCH ALL — Starting all distributors simultaneously...", "info");
+
+    await Promise.all([
+      fetchMaLabs(token),
+      fetchVoip(token)
+    ]);
+
+    btn.disabled = false;
+    btn.textContent = "⚡ Fetch All Distributors";
+    log("FETCH ALL — All jobs triggered! Monitor status on each card.", "success");
+  }
+
+  async function openArrowPanel() {
     document.getElementById("sku-overlay").classList.add("visible");
   }
 
@@ -645,16 +797,14 @@
 
   function updateCount() {
     const text = document.getElementById("sku-input").value;
-    const skus = text.split("\n").filter(s => s.trim());
+    const skus = text.split("
+").filter(s => s.trim());
     document.getElementById("sku-count").textContent = `${skus.length} SKUs entered`;
   }
 
   async function startArrowFetch() {
     const skuText = document.getElementById("sku-input").value.trim();
-    if (!skuText) {
-      alert("Please enter at least one SKU!");
-      return;
-    }
+    if (!skuText) { alert("Please enter at least one SKU!"); return; }
 
     const token = prompt("🔑 Enter your GitHub Personal Access Token:");
     if (!token) return;
@@ -662,7 +812,6 @@
     const btn = document.getElementById("arrow-start-btn");
     btn.disabled = true;
     btn.textContent = "Starting...";
-
     log("Arrow Electronics — Triggering GitHub Actions workflow...", "info");
 
     try {
@@ -683,12 +832,11 @@
         log("Arrow Electronics — Job started! Check GitHub Actions.", "success");
         const statusMsg = document.getElementById("arrow-status");
         statusMsg.className = "status-msg visible success";
-        statusMsg.innerHTML = `✓ Job started! Go to <a href="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/actions" target="_blank" style="color:var(--accent)">GitHub Actions</a> to monitor.<br>Download Excel when complete.`;
+        statusMsg.innerHTML = `✓ Job started! Go to <a href="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/actions" target="_blank" style="color:var(--accent)">GitHub Actions</a> to monitor.`;
         closeArrowPanel();
       } else {
         throw new Error(`GitHub API error: ${response.status}`);
       }
-
     } catch (err) {
       log(`Arrow — Error: ${err.message}`, "error");
       alert(`Error: ${err.message}`);
@@ -698,20 +846,43 @@
     btn.textContent = "🚀 Start Fetch";
   }
 
+  // Initialize log on page load
+  window.addEventListener("load", () => {
+    renderLog();
+  });
 
-  async function fetchVoip() {
-    const statusMsg = document.getElementById("voip-status");
+
+  function openAvnetPanel() {
+    document.getElementById("avnet-sku-overlay").classList.add("visible");
+  }
+
+  function closeAvnetPanel() {
+    document.getElementById("avnet-sku-overlay").classList.remove("visible");
+  }
+
+  function updateAvnetCount() {
+    const text = document.getElementById("avnet-sku-input").value;
+    const skus = text.split("\n").filter(s => s.trim());
+    document.getElementById("avnet-sku-count").textContent = `${skus.length} SKUs entered`;
+  }
+
+  async function startAvnetFetch() {
+    const skuText = document.getElementById("avnet-sku-input").value.trim();
+    if (!skuText) { alert("Please enter at least one SKU!"); return; }
 
     const token = prompt("🔑 Enter your GitHub Personal Access Token:");
     if (!token) return;
 
-    statusMsg.className = "status-msg visible running";
-    statusMsg.textContent = "Starting GitHub Actions job...";
-    log("888VoIP — Triggering GitHub Actions workflow...", "info");
+    const btn = document.getElementById("avnet-start-btn");
+    btn.disabled = true;
+    btn.textContent = "Starting...";
+
+    setBadge("avnet-badge", "running", "Starting...");
+    log("Avnet — Triggering GitHub Actions workflow...", "info");
 
     try {
       const response = await fetch(
-        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/fetch_voip.yml/dispatches`,
+        `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/actions/workflows/fetch_avnet.yml/dispatches`,
         {
           method: "POST",
           headers: {
@@ -719,22 +890,25 @@
             "Accept": "application/vnd.github+json",
             "Content-Type": "application/json"
           },
-          body: JSON.stringify({ ref: "main", inputs: { confirm: "YES" } })
+          body: JSON.stringify({ ref: "main", inputs: { skus: skuText } })
         }
       );
 
       if (response.status === 204) {
-        log("888VoIP — Job started! Check GitHub Actions.", "success");
-        statusMsg.className = "status-msg visible success";
-        statusMsg.innerHTML = `✓ Job started! Go to <a href="https://github.com/${GITHUB_OWNER}/${GITHUB_REPO}/actions" target="_blank" style="color:var(--accent)">GitHub Actions</a> to monitor.<br>Download Excel when complete.`;
+        log("Avnet — Job started! Monitoring status...", "success");
+        setBadge("avnet-badge", "running", "Job running...");
+        setTimeout(() => checkJobStatus(token, "fetch_avnet.yml", "avnet-badge", "Avnet"), 5000);
+        closeAvnetPanel();
       } else {
         throw new Error(`GitHub API error: ${response.status}`);
       }
     } catch (err) {
-      log(`888VoIP — Error: ${err.message}`, "error");
-      statusMsg.className = "status-msg visible error";
-      statusMsg.textContent = `Error: ${err.message}`;
+      log(`Avnet — Error: ${err.message}`, "error");
+      setBadge("avnet-badge", "failed", "Failed to start!");
     }
+
+    btn.disabled = false;
+    btn.textContent = "🚀 Start Fetch";
   }
 
 </script>
@@ -749,6 +923,21 @@
     <div class="sku-actions">
       <button class="btn-cancel" onclick="closeArrowPanel()">Cancel</button>
       <button class="btn-start" id="arrow-start-btn" onclick="startArrowFetch()">🚀 Start Fetch</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- Avnet SKU Panel -->
+<div class="sku-overlay" id="avnet-sku-overlay">
+  <div class="sku-panel">
+    <div class="sku-panel-title">Avnet — Fetch by SKUs</div>
+    <div class="sku-panel-desc">Enter one SKU / Part Number per line. No limit.</div>
+    <textarea class="sku-textarea" id="avnet-sku-input" placeholder="Enter SKUs here, one per line:&#10;FODM452R2V&#10;AC0805FR-073K3L&#10;..." oninput="updateAvnetCount()"></textarea>
+    <div class="sku-count" id="avnet-sku-count">0 SKUs entered</div>
+    <div class="sku-actions">
+      <button class="btn-cancel" onclick="closeAvnetPanel()">Cancel</button>
+      <button class="btn-start" id="avnet-start-btn" onclick="startAvnetFetch()">🚀 Start Fetch</button>
     </div>
   </div>
 </div>
