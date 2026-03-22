@@ -20,89 +20,93 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:all 0.2s;color:var(--muted);font-size:12px;margin-bottom:2px;border:1px solid transparent;user-select:none;}
 .nav-item:hover{background:var(--surface2);color:var(--text);}
 .nav-item.active{background:rgba(99,102,241,0.12);color:var(--accent);border-color:rgba(99,102,241,0.2);}
-.nav-badge{margin-left:auto;background:var(--error);color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
-.nav-badge.g{background:var(--success);}
-.nav-badge.o{background:var(--warning);}
+.nav-badge{margin-left:auto;color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
+.nb-g{background:var(--success)}.nb-o{background:var(--warning)}.nb-r{background:var(--error)}
 .main{margin-left:220px;flex:1;padding:24px;position:relative;z-index:1;}
 .page{display:none;}.page.active{display:block;}
-.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:8px;}
 .page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
 .page-title span{color:var(--accent);}
-.topbar-actions{display:flex;gap:8px;}
-.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.topbar-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{padding:7px 14px;border-radius:8px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:11px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:5px;}
 .btn-p{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
-.btn-p:hover{opacity:0.85;}
-.btn-p:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-p:hover{opacity:0.85;}.btn-p:disabled{opacity:0.4;cursor:not-allowed;}
 .btn-s{background:rgba(16,185,129,0.15);color:var(--success);border:1px solid rgba(16,185,129,0.3);}
 .btn-w{background:rgba(245,158,11,0.15);color:var(--warning);border:1px solid rgba(245,158,11,0.3);}
 .btn-e{background:rgba(239,68,68,0.15);color:var(--error);border:1px solid rgba(239,68,68,0.3);}
 .btn-g{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
 .btn-g:hover{color:var(--text);border-color:var(--accent);}
-.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
-.card-title{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
-.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;margin-bottom:20px;}
-.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
-.stat-label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
-.stat-value{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;}
-.stat-sub{font-size:10px;color:var(--muted);margin-top:4px;}
-.c-accent{color:var(--accent)}.c-success{color:var(--success)}.c-warning{color:var(--warning)}.c-error{color:var(--error)}
-.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:16px;}
+.card-title{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px;}
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin-bottom:16px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px;}
+.slabel{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:6px;}
+.svalue{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.ssub{font-size:9px;color:var(--muted);margin-top:3px;}
+.ca{color:var(--accent)}.cs{color:var(--success)}.cw{color:var(--warning)}.ce{color:var(--error)}
+.table-wrap{overflow-x:auto;border-radius:8px;border:1px solid var(--border);}
 table{width:100%;border-collapse:collapse;font-size:11px;}
 thead tr{background:var(--surface2);border-bottom:1px solid var(--border);}
-th{padding:10px 12px;text-align:left;color:var(--muted);font-weight:600;letter-spacing:0.5px;white-space:nowrap;}
-td{padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+th{padding:8px 10px;text-align:left;color:var(--muted);font-weight:600;letter-spacing:0.5px;white-space:nowrap;}
+td{padding:7px 10px;border-bottom:1px solid var(--border);white-space:nowrap;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(99,102,241,0.03);}
 .changed-row td{background:rgba(239,68,68,0.04);}
 .lowstock-row td{background:rgba(245,158,11,0.04);}
-.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
-.b-s{background:rgba(16,185,129,0.1);color:var(--success);border:1px solid rgba(16,185,129,0.2);}
-.b-e{background:rgba(239,68,68,0.1);color:var(--error);border:1px solid rgba(239,68,68,0.2);}
-.b-w{background:rgba(245,158,11,0.1);color:var(--warning);border:1px solid rgba(245,158,11,0.2);}
-.b-m{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
-.form-group{margin-bottom:14px;}
-.form-group label{display:block;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
-.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color 0.2s;}
+.badge{display:inline-flex;align-items:center;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:600;}
+.bs{background:rgba(16,185,129,0.1);color:var(--success);border:1px solid rgba(16,185,129,0.2);}
+.be{background:rgba(239,68,68,0.1);color:var(--error);border:1px solid rgba(239,68,68,0.2);}
+.bw{background:rgba(245,158,11,0.1);color:var(--warning);border:1px solid rgba(245,158,11,0.2);}
+.bm{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+.form-group{margin-bottom:12px;}
+.form-group label{display:block;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color 0.2s;}
 .form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
 .form-group select option{background:var(--surface2);}
-.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-.form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
-.search-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
-.search-bar input,.search-bar select{background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;}
-.search-bar input{flex:1;min-width:200px;}
+.fr2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+.search-bar{display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;}
+.search-bar input,.search-bar select{background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;}
+.search-bar input{flex:1;min-width:180px;}
 .search-bar input:focus{border-color:var(--accent);}
+/* PAGINATION */
+.pagination{display:flex;align-items:center;gap:6px;margin-top:12px;flex-wrap:wrap;}
+.pager{padding:5px 10px;border-radius:6px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;font-size:11px;font-family:'DM Mono',monospace;transition:all 0.2s;}
+.pager:hover{border-color:var(--accent);color:var(--text);}
+.pager.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.pager:disabled{opacity:0.4;cursor:not-allowed;}
+.page-info{font-size:11px;color:var(--muted);margin-left:8px;}
+/* MODAL */
 .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:20px;}
 .modal-overlay.open{display:flex;}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;}
-.modal h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px;}
-.modal p{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
-.modal-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:14px;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:24px;width:100%;max-width:500px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal h2{font-family:'Syne',sans-serif;font-size:15px;font-weight:800;margin-bottom:5px;}
+.modal p{font-size:11px;color:var(--muted);margin-bottom:16px;line-height:1.6;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:13px;}
 .modal-close:hover{background:var(--error);border-color:var(--error);}
-.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
-.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:16px;}
+.modal-actions{display:flex;gap:8px;margin-top:14px;justify-content:flex-end;}
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:12px;}
 .upload-zone:hover{border-color:var(--accent);background:rgba(99,102,241,0.04);}
-.upload-zone .uicon{font-size:32px;margin-bottom:8px;}
-.upload-zone p{font-size:12px;color:var(--muted);line-height:1.6;}
+.upload-zone .uicon{font-size:28px;margin-bottom:8px;}
+.upload-zone p{font-size:11px;color:var(--muted);line-height:1.6;}
 .timer-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;margin-bottom:12px;font-size:12px;color:var(--warning);}
 .timer-cd{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--warning);margin-left:auto;}
-.inner-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--surface2);padding:4px;border-radius:8px;width:fit-content;}
-.itab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all 0.2s;}
+.itabs{display:flex;gap:4px;margin-bottom:12px;background:var(--surface2);padding:4px;border-radius:8px;width:fit-content;}
+.itab{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all 0.2s;}
 .itab.active{background:var(--accent);color:#fff;}
-.alert{display:flex;align-items:flex-start;gap:10px;padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:12px;line-height:1.6;}
-.alert-info{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:var(--accent);}
-.alert-success{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:var(--success);}
-.alert-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:var(--warning);}
+.alert{display:flex;align-items:flex-start;gap:8px;padding:10px 14px;border-radius:8px;margin-bottom:12px;font-size:11px;line-height:1.6;}
+.ai{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:var(--accent);}
+.as{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:var(--success);}
+.export-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;}
+.export-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;text-align:center;}
+.export-card .eicon{font-size:28px;margin-bottom:8px;}
+.export-card h3{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;margin-bottom:5px;}
+.export-card p{font-size:10px;color:var(--muted);margin-bottom:12px;line-height:1.5;}
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
-.export-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
-.export-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;text-align:center;}
-.export-card .eicon{font-size:32px;margin-bottom:10px;}
-.export-card h3{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;margin-bottom:6px;}
-.export-card p{font-size:11px;color:var(--muted);margin-bottom:14px;line-height:1.5;}
 </style>
 </head>
 <body>
-
 <div class="sidebar">
   <div class="sidebar-logo">
     <h1>PRICING<span>.</span></h1>
@@ -110,13 +114,13 @@ tr:hover td{background:rgba(99,102,241,0.03);}
   </div>
   <div class="nav" id="nav">
     <div class="nav-item active" data-page="dashboard">📊 <span>Dashboard</span></div>
-    <div class="nav-item" data-page="catalog">📋 <span>SKU Catalog</span> <span class="nav-badge g" id="badge-catalog">0</span></div>
-    <div class="nav-item" data-page="pricing">💰 <span>Pricing</span> <span class="nav-badge o" id="badge-pricing">0</span></div>
+    <div class="nav-item" data-page="catalog">📋 <span>SKU Catalog</span> <span class="nav-badge nb-g" id="badge-catalog">0</span></div>
+    <div class="nav-item" data-page="pricing">💰 <span>Pricing</span> <span class="nav-badge nb-o" id="badge-pricing">0</span></div>
     <div class="nav-item" data-page="upload">⬆️ <span>Bulk Upload</span></div>
     <div class="nav-item" data-page="stock">📦 <span>Stock</span></div>
-    <div class="nav-item" data-page="reservation">🔒 <span>Reservation</span></div>
+    <div class="nav-item" data-page="reservation">🔒 <span>Reservation Management</span></div>
     <div class="nav-item" data-page="pricelog">📈 <span>Price Log</span></div>
-    <div class="nav-item" data-page="deleted">🗑️ <span>Deleted SKUs</span> <span class="nav-badge" id="badge-deleted">0</span></div>
+    <div class="nav-item" data-page="deleted">🗑️ <span>Deleted SKUs</span> <span class="nav-badge nb-r" id="badge-deleted">0</span></div>
     <div class="nav-item" data-page="export">⬇️ <span>Export All</span></div>
   </div>
 </div>
@@ -130,20 +134,22 @@ tr:hover td{background:rgba(99,102,241,0.03);}
     <button class="btn btn-g" onclick="refreshDashboard()">🔄 Refresh</button>
   </div>
   <div class="stats-grid">
-    <div class="stat-card"><div class="stat-label">Total SKUs</div><div class="stat-value c-accent" id="s-total">0</div><div class="stat-sub">Active listings</div></div>
-    <div class="stat-card"><div class="stat-label">Price Changes</div><div class="stat-value c-warning" id="s-changed">0</div><div class="stat-sub">Since last fetch</div></div>
-    <div class="stat-card"><div class="stat-label">Low Stock</div><div class="stat-value c-error" id="s-lowstock">0</div><div class="stat-sub">Below 5 units</div></div>
-    <div class="stat-card"><div class="stat-label">Deleted SKUs</div><div class="stat-value c-success" id="s-deleted">0</div><div class="stat-sub">Total removed</div></div>
-    <div class="stat-card"><div class="stat-label">Reservations</div><div class="stat-value" id="s-reservations">0</div><div class="stat-sub">On hold</div></div>
-    <div class="stat-card"><div class="stat-label">Last Updated</div><div class="stat-value" style="font-size:11px;margin-top:4px" id="s-lastfetch">Never</div><div class="stat-sub">Last fetch</div></div>
+    <div class="stat-card"><div class="slabel">Total SKUs</div><div class="svalue ca" id="s-total">0</div><div class="ssub">Active</div></div>
+    <div class="stat-card"><div class="slabel">Price Changes</div><div class="svalue cw" id="s-changed">0</div><div class="ssub">Since last fetch</div></div>
+    <div class="stat-card"><div class="slabel">Low Stock</div><div class="svalue ce" id="s-lowstock">0</div><div class="ssub">Below 5 units</div></div>
+    <div class="stat-card"><div class="slabel">Deleted</div><div class="svalue cs" id="s-deleted">0</div><div class="ssub">Removed</div></div>
+    <div class="stat-card"><div class="slabel">Reservations</div><div class="svalue" id="s-res">0</div><div class="ssub">On hold</div></div>
+    <div class="stat-card"><div class="slabel">Last Updated</div><div class="svalue" style="font-size:10px;margin-top:6px" id="s-last">Never</div></div>
   </div>
   <div class="card">
     <div class="card-title">// Low Stock Alerts (Below 5 Units)</div>
-    <div class="table-wrap"><table><thead><tr><th>Listed SKU</th><th>Disti SKU</th><th>Vendor</th><th>Quantity</th><th>Updated</th></tr></thead><tbody id="t-lowstock"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No low stock alerts ✅</td></tr></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>sku</th><th>quantity</th></tr></thead><tbody id="t-ls"></tbody></table></div>
+    <div class="pagination" id="pg-ls"></div>
   </div>
   <div class="card">
     <div class="card-title">// Recent Price Changes</div>
-    <div class="table-wrap"><table><thead><tr><th>Listed SKU</th><th>MFR SKU</th><th>Old COG</th><th>New COG</th><th>Diff</th><th>Changed At</th></tr></thead><tbody id="t-recent"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No recent changes</td></tr></tbody></table></div>
+    <div class="table-wrap"><table><thead><tr><th>sku</th><th>old cog</th><th>new cog</th><th>diff</th><th>changed at</th></tr></thead><tbody id="t-rc"></tbody></table></div>
+    <div class="pagination" id="pg-rc"></div>
   </div>
 </div>
 
@@ -152,64 +158,75 @@ tr:hover td{background:rgba(99,102,241,0.03);}
   <div class="topbar">
     <div class="page-title">SKU <span>Catalog</span></div>
     <div class="topbar-actions">
-      <button class="btn btn-g" onclick="exportTemplate()">⬇ Template</button>
-      <button class="btn btn-p" onclick="document.getElementById('f-listing').click()">⬆ Upload Listing</button>
-      <input type="file" id="f-listing" accept=".xlsx,.xls,.csv" style="display:none" onchange="processFile(this,'listing')"/>
+      <button class="btn btn-g" onclick="exportTemplate()">⬇ template</button>
+      <button class="btn btn-p" onclick="document.getElementById('f-listing').click()">⬆ upload listing</button>
+      <input type="file" id="f-listing" accept=".xlsx,.xls,.csv" style="display:none" onchange="processFile(this)"/>
     </div>
   </div>
   <div class="search-bar">
-    <input type="text" placeholder="Search SKU, ASIN, MFR SKU, Vendor..." id="cat-search" oninput="filterCatalog()"/>
-    <select id="cat-disti" onchange="filterCatalog()"><option value="">All Distributors</option></select>
-    <select id="cat-filter" onchange="filterCatalog()"><option value="">All SKUs</option><option value="changed">Price Changed</option><option value="lowstock">Low Stock</option></select>
+    <input type="text" placeholder="search sku, asin, mfr sku, vendor..." id="cat-search" oninput="filterCatalog()"/>
+    <select id="cat-disti" onchange="filterCatalog()"><option value="">all distributors</option></select>
+    <select id="cat-filter" onchange="filterCatalog()"><option value="">all skus</option><option value="changed">price changed</option><option value="lowstock">low stock</option></select>
   </div>
   <div class="table-wrap">
-    <table><thead><tr><th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Disti SKU</th><th>MFR SKU</th><th>Qty</th><th>COG</th><th>New COG</th><th>Diff</th><th>Handling</th><th>Shipping</th><th>Total COG</th><th>Ref%</th><th>BE</th><th>Min Price</th><th>Price</th><th>Max Price</th><th>Biz Price</th><th>GP Min</th><th>GP SP</th><th>Ship Group</th><th>Updated</th><th>Notes</th><th>Actions</th></tr></thead>
-    <tbody id="t-catalog"><tr><td colspan="25" style="text-align:center;color:var(--muted);padding:30px">No SKUs. Upload a listing file to start.</td></tr></tbody></table>
+    <table><thead><tr>
+      <th>listed sku</th><th>asin</th><th>disti</th><th>vendor</th><th>disti sku</th><th>mfr sku</th>
+      <th>qty</th><th>cog</th><th>new cog</th><th>diff</th><th>handling</th><th>shipping</th>
+      <th>total cog</th><th>referral %</th><th>be</th><th>min price</th><th>price</th>
+      <th>max price</th><th>business price</th><th>gp min</th><th>gp sp</th>
+      <th>shipping group</th><th>updated</th><th>notes</th><th>actions</th>
+    </tr></thead>
+    <tbody id="t-catalog"></tbody></table>
   </div>
+  <div class="pagination" id="pg-catalog"></div>
 </div>
 
 <!-- PRICING -->
 <div class="page" id="page-pricing">
   <div class="topbar"><div class="page-title">Pricing <span>Manager</span></div></div>
   <div id="timer-wrap" style="display:none">
-    <div class="timer-bar">⏳ Price download available for: <span class="timer-cd" id="timer-cd">01:00:00</span></div>
+    <div class="timer-bar">⏳ price download available for: <span class="timer-cd" id="timer-cd">01:00:00</span></div>
   </div>
-  <div class="inner-tabs">
-    <div class="itab active" id="itab-changed" onclick="switchPTab('changed')">Changed SKUs</div>
-    <div class="itab" id="itab-all" onclick="switchPTab('all')">All SKUs</div>
+  <div class="itabs">
+    <div class="itab active" id="itab-c" onclick="switchPTab('changed')">changed skus</div>
+    <div class="itab" id="itab-a" onclick="switchPTab('all')">all skus</div>
   </div>
-  <div style="display:flex;gap:8px;margin-bottom:16px">
-    <button class="btn btn-e" id="btn-dl-changed" onclick="dlChanged()">⬇ Download Changed Prices</button>
-    <button class="btn btn-g" onclick="dlAllPrices()">⬇ Download All Prices</button>
+  <div style="display:flex;gap:8px;margin-bottom:12px">
+    <button class="btn btn-e" id="btn-dlc" onclick="dlChanged()">⬇ download changed prices</button>
+    <button class="btn btn-g" onclick="dlAllPrices()">⬇ download all prices</button>
   </div>
-  <div class="table-wrap"><table><thead><tr><th>Listed SKU</th><th>ASIN</th><th>COG</th><th>New COG</th><th>Diff</th><th>Total COG</th><th>BE</th><th>Min Price</th><th>Price</th><th>Max Price</th><th>Biz Price</th><th>GP Min</th><th>GP SP</th><th>Status</th></tr></thead>
-  <tbody id="t-pricing"><tr><td colspan="14" style="text-align:center;color:var(--muted);padding:30px">No pricing data</td></tr></tbody></table></div>
+  <div class="table-wrap"><table><thead><tr>
+    <th>listed sku</th><th>asin</th><th>cog</th><th>new cog</th><th>diff</th>
+    <th>total cog</th><th>be</th><th>min price</th><th>price</th><th>max price</th>
+    <th>business price</th><th>gp min</th><th>gp sp</th><th>status</th>
+  </tr></thead><tbody id="t-pricing"></tbody></table></div>
+  <div class="pagination" id="pg-pricing"></div>
 </div>
 
 <!-- UPLOAD -->
 <div class="page" id="page-upload">
   <div class="topbar">
     <div class="page-title">Bulk <span>Upload</span></div>
-    <button class="btn btn-g" onclick="exportTemplate()">⬇ Download Template</button>
+    <button class="btn btn-g" onclick="exportTemplate()">⬇ download template</button>
   </div>
   <div class="card">
-    <div class="card-title">// Upload SKU Listing File (Excel)</div>
-    <div class="alert alert-info">📌 Existing SKUs will be updated. New SKUs will be added. Weight/L/W/H only fills empty fields.</div>
+    <div class="card-title">// upload sku listing file (excel)</div>
+    <div class="alert ai">📌 existing skus will be updated. new skus will be added. weight/l/w/h only fills empty fields.</div>
     <div class="upload-zone" onclick="document.getElementById('f-bulk').click()">
       <div class="uicon">📂</div>
-      <p>Click to upload Excel file (.xlsx, .xls, .csv)<br/>Required headers: Disti, Vendor, Disti SKU, MFR SKU, Listed SKU, ASIN, quantity, Cog, Handling, Shipping, Refferal</p>
-      <input type="file" id="f-bulk" accept=".xlsx,.xls,.csv" style="display:none" onchange="processFile(this,'bulk')"/>
+      <p>click to upload excel file (.xlsx, .xls, .csv)<br/>required: disti, vendor, disti sku, mfr sku, listed sku, asin, quantity, cog, handling, shipping, refferal</p>
+      <input type="file" id="f-bulk" accept=".xlsx,.xls,.csv" style="display:none" onchange="processFile(this)"/>
     </div>
     <div id="upload-result"></div>
   </div>
   <div class="card">
-    <div class="card-title">// Add Single SKU</div>
-    <div class="form-row"><div class="form-group"><label>Disti</label><input type="text" id="a-disti" placeholder="MA Labs"/></div><div class="form-group"><label>Vendor</label><input type="text" id="a-vendor" placeholder="Tripp Lite"/></div></div>
-    <div class="form-row"><div class="form-group"><label>Disti SKU</label><input type="text" id="a-dsku"/></div><div class="form-group"><label>MFR SKU</label><input type="text" id="a-msku"/></div></div>
-    <div class="form-row"><div class="form-group"><label>Listed SKU *</label><input type="text" id="a-lsku"/></div><div class="form-group"><label>ASIN</label><input type="text" id="a-asin"/></div></div>
-    <div class="form-row3"><div class="form-group"><label>COG ($)</label><input type="number" id="a-cog" step="0.01"/></div><div class="form-group"><label>Handling ($)</label><input type="number" id="a-handling" step="0.01"/></div><div class="form-group"><label>Shipping ($)</label><input type="number" id="a-shipping" step="0.01"/></div></div>
-    <div class="form-row3"><div class="form-group"><label>Referral (%)</label><input type="number" id="a-reff" step="0.1"/></div><div class="form-group"><label>Quantity</label><input type="number" id="a-qty"/></div><div class="form-group"><label>Shipping Group</label><input type="text" id="a-sg" placeholder="DEFAULT"/></div></div>
-    <button class="btn btn-p" onclick="addSingle()">+ Add SKU</button>
+    <div class="card-title">// add single sku</div>
+    <div class="fr2"><div class="form-group"><label>disti</label><input type="text" id="a-disti" placeholder="MA Labs"/></div><div class="form-group"><label>vendor</label><input type="text" id="a-vendor"/></div></div>
+    <div class="fr2"><div class="form-group"><label>disti sku</label><input type="text" id="a-dsku"/></div><div class="form-group"><label>mfr sku</label><input type="text" id="a-msku"/></div></div>
+    <div class="fr2"><div class="form-group"><label>listed sku *</label><input type="text" id="a-lsku"/></div><div class="form-group"><label>asin</label><input type="text" id="a-asin"/></div></div>
+    <div class="fr3"><div class="form-group"><label>cog ($)</label><input type="number" id="a-cog" step="0.01"/></div><div class="form-group"><label>handling ($)</label><input type="number" id="a-handling" step="0.01"/></div><div class="form-group"><label>shipping ($)</label><input type="number" id="a-shipping" step="0.01"/></div></div>
+    <div class="fr3"><div class="form-group"><label>referral (%)</label><input type="number" id="a-reff" step="0.1" placeholder="e.g. 8"/></div><div class="form-group"><label>quantity</label><input type="number" id="a-qty"/></div><div class="form-group"><label>shipping group</label><input type="text" id="a-sg" placeholder="DEFAULT"/></div></div>
+    <button class="btn btn-p" onclick="addSingle()">+ add sku</button>
   </div>
 </div>
 
@@ -217,70 +234,79 @@ tr:hover td{background:rgba(99,102,241,0.03);}
 <div class="page" id="page-stock">
   <div class="topbar">
     <div class="page-title">Stock <span>Management</span></div>
-    <button class="btn btn-s" onclick="dlStock()">⬇ Download Stock TXT</button>
+    <button class="btn btn-s" onclick="dlStock()">⬇ download stock txt</button>
   </div>
-  <div class="alert alert-info">📌 Downloads full catalog every time. Headers: sku | quantity</div>
-  <div class="table-wrap"><table><thead><tr><th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Quantity</th><th>Status</th><th>Updated</th></tr></thead>
-  <tbody id="t-stock"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No stock data</td></tr></tbody></table></div>
+  <div class="alert ai">📌 downloads full catalog every time. headers: sku | quantity</div>
+  <div class="table-wrap"><table><thead><tr><th>listed sku</th><th>asin</th><th>disti</th><th>vendor</th><th>quantity</th><th>status</th><th>updated</th></tr></thead>
+  <tbody id="t-stock"></tbody></table></div>
+  <div class="pagination" id="pg-stock"></div>
 </div>
 
 <!-- RESERVATION -->
 <div class="page" id="page-reservation">
   <div class="topbar">
-    <div class="page-title">Reservation <span>Manager</span></div>
+    <div class="page-title">Reservation <span>Management</span></div>
     <div class="topbar-actions">
-      <button class="btn btn-g" onclick="dlResTemplate()">⬇ Template</button>
-      <button class="btn btn-g" onclick="document.getElementById('f-res').click()">⬆ Upload</button>
+      <button class="btn btn-g" onclick="dlResTemplate()">⬇ template</button>
+      <button class="btn btn-g" onclick="document.getElementById('f-res').click()">⬆ upload</button>
       <input type="file" id="f-res" accept=".xlsx,.xls,.csv" style="display:none" onchange="uploadRes(this)"/>
-      <button class="btn btn-p" onclick="openModal('modal-addres')">+ Add</button>
+      <button class="btn btn-p" onclick="openModal('modal-addres')">+ add</button>
     </div>
   </div>
-  <div class="table-wrap"><table><thead><tr><th>Disti</th><th>SKU</th><th>Quantity</th><th>Hold No 1</th><th>Hold No 2</th><th>Added</th><th>Actions</th></tr></thead>
-  <tbody id="t-res"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No reservations</td></tr></tbody></table></div>
+  <div class="table-wrap"><table><thead><tr><th>disti</th><th>sku</th><th>quantity</th><th>hold no 1</th><th>hold no 2</th><th>added</th><th>actions</th></tr></thead>
+  <tbody id="t-res"></tbody></table></div>
+  <div class="pagination" id="pg-res"></div>
 </div>
 
 <!-- PRICE LOG -->
 <div class="page" id="page-pricelog">
   <div class="topbar">
     <div class="page-title">Price Change <span>Log</span></div>
-    <button class="btn btn-g" onclick="if(confirm('Clear all logs?')){priceLog=[];save();renderPriceLog();}">🗑 Clear</button>
+    <button class="btn btn-g" onclick="if(confirm('clear all logs?')){priceLog=[];save();renderPriceLog();}">🗑 clear</button>
   </div>
-  <div class="table-wrap"><table><thead><tr><th>Date/Time</th><th>Listed SKU</th><th>MFR SKU</th><th>Disti</th><th>Old COG</th><th>New COG</th><th>Change</th></tr></thead>
-  <tbody id="t-pricelog"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No price changes logged</td></tr></tbody></table></div>
+  <div class="table-wrap"><table><thead><tr><th>date/time</th><th>listed sku</th><th>mfr sku</th><th>disti</th><th>old cog</th><th>new cog</th><th>change</th></tr></thead>
+  <tbody id="t-pricelog"></tbody></table></div>
+  <div class="pagination" id="pg-pricelog"></div>
 </div>
 
 <!-- DELETED -->
 <div class="page" id="page-deleted">
-  <div class="topbar"><div class="page-title">Deleted <span>SKUs</span></div></div>
-  <div class="table-wrap"><table><thead><tr><th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Deletion Reason</th><th>Deleted At</th><th>Actions</th></tr></thead>
-  <tbody id="t-deleted"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No deleted SKUs</td></tr></tbody></table></div>
+  <div class="topbar">
+    <div class="page-title">Deleted <span>SKUs</span></div>
+    <button class="btn btn-s" onclick="bulkRestore()">↩ bulk restore all</button>
+  </div>
+  <div class="table-wrap"><table><thead><tr><th><input type="checkbox" id="chk-all" onchange="toggleAllChk(this)"/></th><th>listed sku</th><th>asin</th><th>disti</th><th>vendor</th><th>deletion reason</th><th>deleted at</th><th>actions</th></tr></thead>
+  <tbody id="t-deleted"></tbody></table></div>
+  <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+    <button class="btn btn-s" onclick="restoreSelected()">↩ restore selected</button>
+    <div class="pagination" id="pg-deleted"></div>
+  </div>
 </div>
 
 <!-- EXPORT -->
 <div class="page" id="page-export">
   <div class="topbar"><div class="page-title">Export <span>All</span></div></div>
   <div class="export-grid">
-    <div class="export-card"><div class="eicon">💰</div><h3>Changed Prices</h3><p>Only changed SKUs<br/>TXT · 1hr timer</p><button class="btn btn-e" style="width:100%" onclick="dlChanged()">⬇ Download</button></div>
-    <div class="export-card"><div class="eicon">📋</div><h3>All Prices</h3><p>Full pricing catalog<br/>TXT format</p><button class="btn btn-p" style="width:100%" onclick="dlAllPrices()">⬇ Download</button></div>
-    <div class="export-card"><div class="eicon">📦</div><h3>Stock File</h3><p>Full stock catalog<br/>TXT · sku + quantity</p><button class="btn btn-s" style="width:100%" onclick="dlStock()">⬇ Download</button></div>
-    <div class="export-card"><div class="eicon">📊</div><h3>Full Catalog</h3><p>Complete SKU data<br/>Excel format</p><button class="btn btn-g" style="width:100%" onclick="dlFullCatalog()">⬇ Download</button></div>
-    <div class="export-card"><div class="eicon">📈</div><h3>Price Log</h3><p>Full history<br/>Excel format</p><button class="btn btn-g" style="width:100%" onclick="dlPriceLog()">⬇ Download</button></div>
-    <div class="export-card"><div class="eicon">🔒</div><h3>Reservations</h3><p>Reserved inventory<br/>Excel format</p><button class="btn btn-g" style="width:100%" onclick="dlReservations()">⬇ Download</button></div>
+    <div class="export-card"><div class="eicon">💰</div><h3>changed prices</h3><p>only changed skus<br/>txt · 1hr timer</p><button class="btn btn-e" style="width:100%" onclick="dlChanged()">⬇ download</button></div>
+    <div class="export-card"><div class="eicon">📋</div><h3>all prices</h3><p>full pricing catalog<br/>txt format</p><button class="btn btn-p" style="width:100%" onclick="dlAllPrices()">⬇ download</button></div>
+    <div class="export-card"><div class="eicon">📦</div><h3>stock file</h3><p>full stock catalog<br/>txt · sku + quantity</p><button class="btn btn-s" style="width:100%" onclick="dlStock()">⬇ download</button></div>
+    <div class="export-card"><div class="eicon">📊</div><h3>full catalog</h3><p>complete sku data<br/>excel format</p><button class="btn btn-g" style="width:100%" onclick="dlFullCatalog()">⬇ download</button></div>
+    <div class="export-card"><div class="eicon">📈</div><h3>price log</h3><p>full history<br/>excel format</p><button class="btn btn-g" style="width:100%" onclick="dlPriceLog()">⬇ download</button></div>
+    <div class="export-card"><div class="eicon">🔒</div><h3>reservations</h3><p>reserved inventory<br/>excel format</p><button class="btn btn-g" style="width:100%" onclick="dlReservations()">⬇ download</button></div>
   </div>
 </div>
-
-</div><!-- end main -->
+</div>
 
 <!-- MODALS -->
 <div class="modal-overlay" id="modal-delete">
   <div class="modal">
     <div class="modal-close" onclick="closeModal('modal-delete')">✕</div>
-    <h2>🗑️ Delete SKU</h2>
-    <p>Select a reason. SKU will move to Deleted tab.</p>
-    <div class="form-group"><label>SKU</label><input type="text" id="del-sku-show" readonly/></div>
-    <div class="form-group"><label>Deletion Reason *</label>
+    <h2>🗑️ delete sku</h2>
+    <p>select a reason. sku will move to deleted tab.</p>
+    <div class="form-group"><label>sku</label><input type="text" id="del-sku-show" readonly/></div>
+    <div class="form-group"><label>deletion reason *</label>
       <select id="del-reason">
-        <option value="">Select reason...</option>
+        <option value="">select reason...</option>
         <option>Suspected Intellectual Property Violations</option>
         <option>Received Intellectual Property Complaints</option>
         <option>Product Authenticity Customer Complaints</option>
@@ -294,8 +320,8 @@ tr:hover td{background:rgba(99,102,241,0.03);}
       </select>
     </div>
     <div class="modal-actions">
-      <button class="btn btn-g" onclick="closeModal('modal-delete')">Cancel</button>
-      <button class="btn btn-e" onclick="confirmDelete()">Delete SKU</button>
+      <button class="btn btn-g" onclick="closeModal('modal-delete')">cancel</button>
+      <button class="btn btn-e" onclick="confirmDelete()">delete sku</button>
     </div>
   </div>
 </div>
@@ -303,11 +329,13 @@ tr:hover td{background:rgba(99,102,241,0.03);}
 <div class="modal-overlay" id="modal-note">
   <div class="modal">
     <div class="modal-close" onclick="closeModal('modal-note')">✕</div>
-    <h2>📝 Add Note</h2>
-    <div class="form-group"><label>SKU: <span id="note-sku-lbl"></span></label><textarea id="note-txt" style="height:100px;resize:vertical;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;" placeholder="Enter note..."></textarea></div>
+    <h2>📝 add note</h2>
+    <div class="form-group"><label>sku: <span id="note-lbl"></span></label>
+      <textarea id="note-txt" style="height:90px;resize:vertical;width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:7px;padding:8px 11px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;" placeholder="enter note..."></textarea>
+    </div>
     <div class="modal-actions">
-      <button class="btn btn-g" onclick="closeModal('modal-note')">Cancel</button>
-      <button class="btn btn-p" onclick="saveNote()">Save Note</button>
+      <button class="btn btn-g" onclick="closeModal('modal-note')">cancel</button>
+      <button class="btn btn-p" onclick="saveNote()">save note</button>
     </div>
   </div>
 </div>
@@ -315,417 +343,550 @@ tr:hover td{background:rgba(99,102,241,0.03);}
 <div class="modal-overlay" id="modal-addres">
   <div class="modal">
     <div class="modal-close" onclick="closeModal('modal-addres')">✕</div>
-    <h2>🔒 Add Reservation</h2>
-    <div class="form-row"><div class="form-group"><label>Disti</label><input type="text" id="r-disti"/></div><div class="form-group"><label>SKU</label><input type="text" id="r-sku"/></div></div>
-    <div class="form-row"><div class="form-group"><label>Quantity</label><input type="number" id="r-qty"/></div><div class="form-group"><label>Hold No 1</label><input type="text" id="r-h1"/></div></div>
-    <div class="form-group"><label>Hold No 2</label><input type="text" id="r-h2"/></div>
+    <h2>🔒 add reservation</h2>
+    <div class="fr2"><div class="form-group"><label>disti</label><input type="text" id="r-disti"/></div><div class="form-group"><label>sku</label><input type="text" id="r-sku"/></div></div>
+    <div class="fr2"><div class="form-group"><label>quantity</label><input type="number" id="r-qty"/></div><div class="form-group"><label>hold no 1</label><input type="text" id="r-h1"/></div></div>
+    <div class="form-group"><label>hold no 2</label><input type="text" id="r-h2"/></div>
     <div class="modal-actions">
-      <button class="btn btn-g" onclick="closeModal('modal-addres')">Cancel</button>
-      <button class="btn btn-p" onclick="saveRes()">Add</button>
+      <button class="btn btn-g" onclick="closeModal('modal-addres')">cancel</button>
+      <button class="btn btn-p" onclick="saveRes()">add</button>
     </div>
   </div>
 </div>
 
 <script>
-var skus = JSON.parse(localStorage.getItem('pp_skus') || '[]');
-var deletedSkus = JSON.parse(localStorage.getItem('pp_deleted') || '[]');
-var priceLog = JSON.parse(localStorage.getItem('pp_pricelog') || '[]');
-var reservations = JSON.parse(localStorage.getItem('pp_res') || '[]');
-var timerEnd = parseInt(localStorage.getItem('pp_timer') || '0');
+var skus = JSON.parse(localStorage.getItem('pp_skus')||'[]');
+var deletedSkus = JSON.parse(localStorage.getItem('pp_deleted')||'[]');
+var priceLog = JSON.parse(localStorage.getItem('pp_pricelog')||'[]');
+var reservations = JSON.parse(localStorage.getItem('pp_res')||'[]');
+var timerEnd = parseInt(localStorage.getItem('pp_timer')||'0');
 var currentDelSku = null;
 var currentNoteSku = null;
 var pTab = 'changed';
 var timerInterval = null;
 
-function save() {
-  localStorage.setItem('pp_skus', JSON.stringify(skus));
-  localStorage.setItem('pp_deleted', JSON.stringify(deletedSkus));
-  localStorage.setItem('pp_pricelog', JSON.stringify(priceLog));
-  localStorage.setItem('pp_res', JSON.stringify(reservations));
+// PAGE STATES
+var pages = {
+  ls:{page:1,per:10}, rc:{page:1,per:10},
+  catalog:{page:1,per:50}, pricing:{page:1,per:50},
+  stock:{page:1,per:50}, res:{page:1,per:50},
+  pricelog:{page:1,per:50}, deleted:{page:1,per:50}
+};
+
+var catalogFiltered = [];
+
+function save(){
+  localStorage.setItem('pp_skus',JSON.stringify(skus));
+  localStorage.setItem('pp_deleted',JSON.stringify(deletedSkus));
+  localStorage.setItem('pp_pricelog',JSON.stringify(priceLog));
+  localStorage.setItem('pp_res',JSON.stringify(reservations));
   updateBadges();
 }
 
-function updateBadges() {
+function updateBadges(){
   document.getElementById('badge-catalog').textContent = skus.length;
-  document.getElementById('badge-pricing').textContent = skus.filter(function(s){return s.diff==='Changed';}).length;
+  document.getElementById('badge-pricing').textContent = skus.filter(function(s){return s.diff==='changed';}).length;
   document.getElementById('badge-deleted').textContent = deletedSkus.length;
 }
 
-// FORMULAS
-function calcAll(s) {
-  var cog = parseFloat(s.newCog || s.cog || 0);
-  var handling = parseFloat(s.handling || 0);
-  var shipping = parseFloat(s.shipping || 0);
-  var reff = parseFloat(s.referral || 0) / 100;
-  s.totalCog = cog + handling + shipping;
-  s.be = reff < 1 ? (0.01 * s.totalCog) / (1 - reff) * 100 : 0;
+// =============================================
+// FORMULAS - referral stored as % (e.g. 8 = 8%)
+// =============================================
+function calcAll(s){
+  var cog = parseFloat(s.newCog||s.cog||0);
+  var handling = parseFloat(s.handling||0);
+  var shipping = parseFloat(s.shipping||0);
+  // referral is stored as percentage like 8 meaning 8%
+  var reffPct = parseFloat(s.referral||0);
+  var reff = reffPct / 100;
+
+  s.totalCog = Math.round((cog + handling + shipping)*100)/100;
+  s.be = reff < 1 ? Math.round(((0.01 * s.totalCog) / (1 - reff) * 100)*10000)/10000 : 0;
   s.minPrice = r99(s.be + s.be * 0.01);
   s.sellerPrice = r99(s.be + s.be * 0.02);
   s.maxPrice = r99(s.sellerPrice * 2);
   s.businessPrice = s.sellerPrice;
-  s.gpMin = s.minPrice - s.minPrice * reff - s.totalCog;
-  s.gpSP = s.sellerPrice - s.sellerPrice * reff - s.totalCog;
-  s.diff = parseFloat(s.cog||0) === parseFloat(s.newCog||s.cog||0) ? 'No Change' : 'Changed';
+  s.gpMin = Math.round((s.minPrice - s.minPrice * reff - s.totalCog)*100)/100;
+  s.gpSP = Math.round((s.sellerPrice - s.sellerPrice * reff - s.totalCog)*100)/100;
+  var oldCog = parseFloat(s.cog||0);
+  var newCog = parseFloat(s.newCog||s.cog||0);
+  s.diff = Math.abs(oldCog - newCog) < 0.001 ? 'no change' : 'changed';
   return s;
 }
 
-function r99(v) {
+function r99(v){
+  if(v<=0) return 0;
   return parseFloat((Math.ceil(v) - 0.01).toFixed(2));
 }
 
-function fmt(n) { return '$' + parseFloat(n||0).toFixed(2); }
+function fmt(n){ return '$'+parseFloat(n||0).toFixed(2); }
 
+// =============================================
 // NAVIGATION
-document.getElementById('nav').addEventListener('click', function(e) {
+// =============================================
+document.getElementById('nav').addEventListener('click', function(e){
   var item = e.target.closest('.nav-item');
-  if (!item) return;
+  if(!item) return;
   var page = item.getAttribute('data-page');
-  if (!page) return;
+  if(!page) return;
   document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
   document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
   item.classList.add('active');
-  document.getElementById('page-' + page).classList.add('active');
-  if (page === 'dashboard') refreshDashboard();
-  else if (page === 'catalog') renderCatalog(null);
-  else if (page === 'pricing') renderPricing();
-  else if (page === 'stock') renderStock();
-  else if (page === 'deleted') renderDeleted();
-  else if (page === 'pricelog') renderPriceLog();
-  else if (page === 'reservation') renderReservations();
+  document.getElementById('page-'+page).classList.add('active');
+  if(page==='dashboard') refreshDashboard();
+  else if(page==='catalog'){catalogFiltered=[...skus];renderCatalog();}
+  else if(page==='pricing') renderPricing();
+  else if(page==='stock') renderStock();
+  else if(page==='deleted') renderDeleted();
+  else if(page==='pricelog') renderPriceLog();
+  else if(page==='reservation') renderReservations();
 });
 
-// DASHBOARD
-function refreshDashboard() {
-  document.getElementById('s-total').textContent = skus.length;
-  document.getElementById('s-changed').textContent = skus.filter(function(s){return s.diff==='Changed';}).length;
-  document.getElementById('s-lowstock').textContent = skus.filter(function(s){return parseInt(s.quantity||0)<5;}).length;
-  document.getElementById('s-deleted').textContent = deletedSkus.length;
-  document.getElementById('s-reservations').textContent = reservations.length;
-  document.getElementById('s-lastfetch').textContent = localStorage.getItem('pp_lastfetch') || 'Never';
+// =============================================
+// PAGINATION HELPER
+// =============================================
+function paginate(data, key, tbodyId, pgId, renderRowFn, emptyMsg){
+  var p = pages[key];
+  var total = data.length;
+  var totalPages = Math.ceil(total / p.per) || 1;
+  if(p.page > totalPages) p.page = totalPages;
+  var start = (p.page-1)*p.per;
+  var slice = data.slice(start, start+p.per);
 
-  var ls = skus.filter(function(s){return parseInt(s.quantity||0)<5;});
-  document.getElementById('t-lowstock').innerHTML = ls.length === 0
-    ? '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No low stock ✅</td></tr>'
-    : ls.map(function(s){return '<tr><td>'+s.listedSku+'</td><td>'+s.distiSku+'</td><td>'+s.vendor+'</td><td><span class="badge b-e">'+s.quantity+'</span></td><td style="color:var(--muted);font-size:10px">'+s.updatedAt+'</td></tr>';}).join('');
-
-  var rc = priceLog.slice(-8).reverse();
-  document.getElementById('t-recent').innerHTML = rc.length === 0
-    ? '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No recent changes</td></tr>'
-    : rc.map(function(l){var d=parseFloat(l.newCog)-parseFloat(l.oldCog);return '<tr><td>'+l.listedSku+'</td><td>'+l.mfrSku+'</td><td>'+fmt(l.oldCog)+'</td><td>'+fmt(l.newCog)+'</td><td><span class="badge '+(d>0?'b-e':'b-s')+'">'+d.toFixed(2)+'</span></td><td style="color:var(--muted);font-size:10px">'+l.changedAt+'</td></tr>';}).join('');
-}
-
-// CATALOG
-function renderCatalog(data) {
-  var rows = data || skus;
-  var tbody = document.getElementById('t-catalog');
-  if (rows.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="25" style="text-align:center;color:var(--muted);padding:30px">No SKUs loaded.</td></tr>';
+  var tbody = document.getElementById(tbodyId);
+  if(total===0){
+    tbody.innerHTML = '<tr><td colspan="20" style="text-align:center;color:var(--muted);padding:24px">'+emptyMsg+'</td></tr>';
+    document.getElementById(pgId).innerHTML = '';
     return;
   }
-  tbody.innerHTML = rows.map(function(s) {
-    var qBadge = parseInt(s.quantity||0)<5 ? '<span class="badge b-e">'+s.quantity+'</span>' : '<span class="badge b-s">'+s.quantity+'</span>';
-    var dBadge = s.diff==='Changed' ? '<span class="badge b-e">Changed</span>' : '<span class="badge b-s">No Change</span>';
-    var gpMinColor = parseFloat(s.gpMin||0)>=0 ? 'var(--success)' : 'var(--error)';
-    var gpSPColor = parseFloat(s.gpSP||0)>=0 ? 'var(--success)' : 'var(--error)';
-    return '<tr class="'+(s.diff==='Changed'?'changed-row':'')+(parseInt(s.quantity||0)<5?' lowstock-row':'')+'">'+
-      '<td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td><td>'+s.distiSku+'</td><td>'+s.mfrSku+'</td>'+
-      '<td>'+qBadge+'</td><td>'+fmt(s.cog)+'</td><td>'+fmt(s.newCog||s.cog)+'</td><td>'+dBadge+'</td>'+
+  tbody.innerHTML = slice.map(renderRowFn).join('');
+
+  // Pagination buttons
+  var pgDiv = document.getElementById(pgId);
+  var html = '';
+  html += '<button class="pager" onclick="goPage(\''+key+'\','+(p.page-1)+')" '+(p.page<=1?'disabled':'')+'>‹</button>';
+  var start2=Math.max(1,p.page-2), end2=Math.min(totalPages,p.page+2);
+  if(start2>1) html+='<button class="pager" onclick="goPage(\''+key+'\',1)">1</button>'+(start2>2?'<span style="color:var(--muted);padding:0 4px">...</span>':'');
+  for(var i=start2;i<=end2;i++) html+='<button class="pager'+(i===p.page?' active':'')+'" onclick="goPage(\''+key+'\','+i+')">'+i+'</button>';
+  if(end2<totalPages) html+=(end2<totalPages-1?'<span style="color:var(--muted);padding:0 4px">...</span>':'')+'<button class="pager" onclick="goPage(\''+key+'\','+totalPages+')">'+totalPages+'</button>';
+  html += '<button class="pager" onclick="goPage(\''+key+'\','+(p.page+1)+')" '+(p.page>=totalPages?'disabled':'')+'>›</button>';
+  html += '<span class="page-info">'+((start)+1)+'-'+Math.min(start+p.per,total)+' of '+total+'</span>';
+  pgDiv.innerHTML = html;
+}
+
+function goPage(key, n){
+  pages[key].page = n;
+  if(key==='ls'||key==='rc') refreshDashboard();
+  else if(key==='catalog') renderCatalog();
+  else if(key==='pricing') renderPricing();
+  else if(key==='stock') renderStock();
+  else if(key==='deleted') renderDeleted();
+  else if(key==='pricelog') renderPriceLog();
+  else if(key==='res') renderReservations();
+}
+
+// =============================================
+// DASHBOARD
+// =============================================
+function refreshDashboard(){
+  document.getElementById('s-total').textContent = skus.length;
+  document.getElementById('s-changed').textContent = skus.filter(function(s){return s.diff==='changed';}).length;
+  document.getElementById('s-lowstock').textContent = skus.filter(function(s){return parseInt(s.quantity||0)<5;}).length;
+  document.getElementById('s-deleted').textContent = deletedSkus.length;
+  document.getElementById('s-res').textContent = reservations.length;
+  document.getElementById('s-last').textContent = localStorage.getItem('pp_lastfetch')||'Never';
+
+  var ls = skus.filter(function(s){return parseInt(s.quantity||0)<5;});
+  paginate(ls,'ls','t-ls','pg-ls',function(s){
+    return '<tr><td><strong>'+s.listedSku+'</strong></td><td><span class="badge be">'+s.quantity+'</span></td></tr>';
+  },'no low stock ✅');
+
+  var rc = [...priceLog].reverse();
+  paginate(rc,'rc','t-rc','pg-rc',function(l){
+    var d=parseFloat(l.newCog)-parseFloat(l.oldCog);
+    return '<tr><td><strong>'+l.listedSku+'</strong></td><td>'+fmt(l.oldCog)+'</td><td>'+fmt(l.newCog)+'</td><td><span class="badge '+(d>0?'be':'bs')+'">'+d.toFixed(2)+'</span></td><td style="color:var(--muted);font-size:10px">'+l.changedAt+'</td></tr>';
+  },'no recent changes');
+}
+
+// =============================================
+// CATALOG
+// =============================================
+function renderCatalog(){
+  var data = catalogFiltered.length>0 ? catalogFiltered : skus;
+  paginate(data,'catalog','t-catalog','pg-catalog',function(s){
+    var qb = parseInt(s.quantity||0)<5?'<span class="badge be">'+s.quantity+'</span>':'<span class="badge bs">'+s.quantity+'</span>';
+    var db = s.diff==='changed'?'<span class="badge be">changed</span>':'<span class="badge bs">no change</span>';
+    var gmc = parseFloat(s.gpMin||0)>=0?'var(--success)':'var(--error)';
+    var gsc = parseFloat(s.gpSP||0)>=0?'var(--success)':'var(--error)';
+    return '<tr class="'+(s.diff==='changed'?'changed-row':'')+(parseInt(s.quantity||0)<5?' lowstock-row':'')+'">'+
+      '<td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td>'+
+      '<td>'+s.distiSku+'</td><td>'+s.mfrSku+'</td><td>'+qb+'</td>'+
+      '<td>'+fmt(s.cog)+'</td><td>'+fmt(s.newCog||s.cog)+'</td><td>'+db+'</td>'+
       '<td>'+fmt(s.handling)+'</td><td>'+fmt(s.shipping)+'</td><td>'+fmt(s.totalCog)+'</td>'+
-      '<td>'+(s.referral||0)+'%</td><td>'+fmt(s.be)+'</td><td>'+fmt(s.minPrice)+'</td><td>'+fmt(s.sellerPrice)+'</td>'+
-      '<td>'+fmt(s.maxPrice)+'</td><td>'+fmt(s.businessPrice)+'</td>'+
-      '<td style="color:'+gpMinColor+'">'+fmt(s.gpMin)+'</td><td style="color:'+gpSPColor+'">'+fmt(s.gpSP)+'</td>'+
+      '<td>'+(s.referral||0)+'%</td><td>'+fmt(s.be)+'</td><td>'+fmt(s.minPrice)+'</td>'+
+      '<td>'+fmt(s.sellerPrice)+'</td><td>'+fmt(s.maxPrice)+'</td><td>'+fmt(s.businessPrice)+'</td>'+
+      '<td style="color:'+gmc+'">'+fmt(s.gpMin)+'</td><td style="color:'+gsc+'">'+fmt(s.gpSP)+'</td>'+
       '<td>'+(s.shippingGroup||'')+'</td><td style="color:var(--muted);font-size:10px">'+(s.updatedAt||'')+'</td>'+
-      '<td style="max-width:100px;font-size:10px;color:var(--muted)">'+(s.notes||'')+'</td>'+
-      '<td><div style="display:flex;gap:4px">'+
-      '<button class="btn btn-g" style="padding:4px 8px;font-size:10px" onclick="openNote(\''+s.listedSku+'\')">📝</button>'+
-      '<button class="btn btn-e" style="padding:4px 8px;font-size:10px" onclick="openDel(\''+s.listedSku+'\')">🗑</button>'+
+      '<td style="max-width:90px;font-size:10px;color:var(--muted)">'+(s.notes||'')+'</td>'+
+      '<td><div style="display:flex;gap:3px">'+
+      '<button class="btn btn-g" style="padding:3px 7px;font-size:10px" onclick="openNote(\''+s.listedSku+'\')">📝</button>'+
+      '<button class="btn btn-e" style="padding:3px 7px;font-size:10px" onclick="openDel(\''+s.listedSku+'\')">🗑</button>'+
       '</div></td></tr>';
-  }).join('');
+  },'no skus loaded. upload a listing file to start.');
 
-  var distis = [...new Set(skus.map(function(s){return s.disti;}).filter(Boolean))];
-  var dd = document.getElementById('cat-disti');
-  var cv = dd.value;
-  dd.innerHTML = '<option value="">All Distributors</option>' + distis.map(function(d){return '<option value="'+d+'"'+(d===cv?' selected':'')+'>'+d+'</option>';}).join('');
+  var distis=[...new Set(skus.map(function(s){return s.disti;}).filter(Boolean))];
+  var dd=document.getElementById('cat-disti');var cv=dd.value;
+  dd.innerHTML='<option value="">all distributors</option>'+distis.map(function(d){return '<option value="'+d+'"'+(d===cv?' selected':'')+'>'+d+'</option>';}).join('');
 }
 
-function filterCatalog() {
-  var q = document.getElementById('cat-search').value.toLowerCase();
-  var di = document.getElementById('cat-disti').value;
-  var fi = document.getElementById('cat-filter').value;
-  var filtered = skus.filter(function(s) {
-    var mq = !q || [s.listedSku,s.asin,s.mfrSku,s.distiSku,s.vendor,s.disti].some(function(v){return (v||'').toLowerCase().includes(q);});
-    var md = !di || s.disti === di;
-    var mf = !fi || (fi==='changed'&&s.diff==='Changed') || (fi==='lowstock'&&parseInt(s.quantity||0)<5);
-    return mq && md && mf;
+function filterCatalog(){
+  var q=document.getElementById('cat-search').value.toLowerCase();
+  var di=document.getElementById('cat-disti').value;
+  var fi=document.getElementById('cat-filter').value;
+  catalogFiltered=skus.filter(function(s){
+    var mq=!q||[s.listedSku,s.asin,s.mfrSku,s.distiSku,s.vendor,s.disti].some(function(v){return (v||'').toLowerCase().includes(q);});
+    var md=!di||s.disti===di;
+    var mf=!fi||(fi==='changed'&&s.diff==='changed')||(fi==='lowstock'&&parseInt(s.quantity||0)<5);
+    return mq&&md&&mf;
   });
-  renderCatalog(filtered);
+  pages.catalog.page=1;
+  renderCatalog();
 }
 
+// =============================================
 // FILE UPLOAD
-function processFile(input, mode) {
-  var file = input.files[0];
-  if (!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    var wb = XLSX.read(e.target.result, {type:'binary'});
-    var ws = wb.Sheets[wb.SheetNames[0]];
-    var data = XLSX.utils.sheet_to_json(ws, {defval:''});
-    var added = 0, updated = 0, dupes = [];
-    data.forEach(function(row) {
-      var lsku = (row['Listed SKU']||row['listed sku']||'').toString().trim();
-      var msku = (row['MFR SKU']||row['mfr sku']||'').toString().trim();
-      if (!lsku) return;
-      var ex = skus.find(function(s){return s.listedSku===lsku;});
-      var nd = {
-        disti: row['Disti']||row['disti']||'',
-        vendor: row['Vendor']||row['vendor']||'',
-        distiSku: row['Disti SKU']||row['disti sku']||'',
-        mfrSku: msku,
-        listedSku: lsku,
-        asin: row['ASIN']||row['asin']||'',
-        quantity: row['quantity']||row['Quantity']||0,
-        cog: parseFloat(row['Cog']||row['COG']||row['cog']||0),
-        newCog: parseFloat(row['new Cog']||row['New COG']||row['Cog']||row['COG']||0),
-        handling: parseFloat(row['Handling']||row['handling']||0),
-        shipping: parseFloat(row['Shipping']||row['shipping']||0),
-        referral: parseFloat(row['Refferal']||row['Referral']||row['referral']||0),
-        shippingGroup: row['merchant_shipping_group_name']||row['Shipping Group']||'',
-        updatedAt: new Date().toLocaleString()
+// =============================================
+function processFile(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var wb=XLSX.read(e.target.result,{type:'binary'});
+    var ws=wb.Sheets[wb.SheetNames[0]];
+    var data=XLSX.utils.sheet_to_json(ws,{defval:''});
+    var added=0,updated=0,dupes=[];
+    data.forEach(function(row){
+      var lsku=(row['Listed SKU']||row['listed sku']||'').toString().trim();
+      var msku=(row['MFR SKU']||row['mfr sku']||'').toString().trim();
+      if(!lsku) return;
+      var ex=skus.find(function(s){return s.listedSku===lsku;});
+
+      // Handle referral - could be decimal (0.08) or percent (8)
+      var rawReff=parseFloat(row['Refferal']||row['Referral']||row['referral']||0);
+      var reffPct = rawReff<=1&&rawReff>0 ? rawReff*100 : rawReff;
+
+      var nd={
+        disti:row['Disti']||row['disti']||'',
+        vendor:row['Vendor']||row['vendor']||'',
+        distiSku:row['Disti SKU']||row['disti sku']||row['Disti Sku']||'',
+        mfrSku:msku,listedSku:lsku,
+        asin:row['ASIN']||row['asin']||'',
+        quantity:parseInt(row['quantity']||row['Quantity']||0),
+        cog:parseFloat(row['Cog']||row['COG']||row['cog']||0),
+        newCog:parseFloat(row['new Cog']||row['New COG']||row['new cog']||row['Cog']||row['COG']||0),
+        handling:parseFloat(row['Handling']||row['handling']||0),
+        shipping:parseFloat(row['Shipping']||row['shipping']||0),
+        referral:reffPct,
+        shippingGroup:row['merchant_shipping_group_name']||row['Shipping Group']||'',
+        updatedAt:new Date().toLocaleString()
       };
-      var asinDupe = skus.find(function(s){return s.asin===nd.asin&&s.asin&&s.listedSku!==lsku;});
-      if (asinDupe) dupes.push(lsku);
-      if (ex) {
-        if (parseFloat(ex.cog)!==parseFloat(nd.newCog)&&parseFloat(nd.newCog)>0) {
+
+      var asinDupe=nd.asin&&skus.find(function(s){return s.asin===nd.asin&&s.listedSku!==lsku;});
+      if(asinDupe) dupes.push(lsku);
+
+      if(ex){
+        if(Math.abs(parseFloat(ex.cog)-parseFloat(nd.newCog))>0.001&&parseFloat(nd.newCog)>0){
           priceLog.push({changedAt:new Date().toLocaleString(),listedSku:lsku,mfrSku:msku,disti:nd.disti,oldCog:ex.cog,newCog:nd.newCog});
         }
-        Object.assign(ex, nd);
-        if (!ex.weight&&row['Weight']) ex.weight=row['Weight'];
-        if (!ex.length&&row['Length']) ex.length=row['Length'];
-        if (!ex.width&&row['Width']) ex.width=row['Width'];
-        if (!ex.height&&row['Height']) ex.height=row['Height'];
-        calcAll(ex);
-        updated++;
+        Object.assign(ex,nd);
+        if(!ex.weight&&row['Weight']) ex.weight=row['Weight'];
+        if(!ex.length&&row['Length']) ex.length=row['Length'];
+        if(!ex.width&&row['Width']) ex.width=row['Width'];
+        if(!ex.height&&row['Height']) ex.height=row['Height'];
+        calcAll(ex);updated++;
       } else {
-        nd.weight=row['Weight']||''; nd.length=row['Length']||''; nd.width=row['Width']||''; nd.height=row['Height']||'';
-        nd.notes='';
-        calcAll(nd);
-        skus.push(nd);
-        added++;
+        nd.weight=row['Weight']||'';nd.length=row['Length']||'';nd.width=row['Width']||'';nd.height=row['Height']||'';
+        nd.notes='';calcAll(nd);skus.push(nd);added++;
       }
     });
-    localStorage.setItem('pp_lastfetch', new Date().toLocaleString());
-    save();
-    renderCatalog(null);
-    var changed = skus.filter(function(s){return s.diff==='Changed';}).length;
-    if (changed>0) startTimer();
-    var msg = '✅ Done! Added: '+added+', Updated: '+updated;
-    if (dupes.length>0) msg += '\n⚠️ Duplicate ASINs: '+dupes.join(', ');
-    var rd = document.getElementById('upload-result');
-    if (rd) rd.innerHTML = '<div class="alert alert-success">'+msg+'</div>';
-    alert(msg);
-    input.value = '';
+    localStorage.setItem('pp_lastfetch',new Date().toLocaleString());
+    save();catalogFiltered=[...skus];renderCatalog();
+    var changed=skus.filter(function(s){return s.diff==='changed';}).length;
+    if(changed>0) startTimer();
+    var msg='✅ done! added: '+added+', updated: '+updated;
+    if(dupes.length>0) msg+='\n⚠️ duplicate asins: '+dupes.join(', ');
+    var rd=document.getElementById('upload-result');
+    if(rd) rd.innerHTML='<div class="alert as">'+msg+'</div>';
+    alert(msg);input.value='';
   };
   reader.readAsBinaryString(file);
 }
 
+// =============================================
 // PRICING
-function renderPricing() {
+// =============================================
+function renderPricing(){
   checkTimer();
-  var data = pTab==='changed' ? skus.filter(function(s){return s.diff==='Changed';}) : skus;
-  var tbody = document.getElementById('t-pricing');
-  if (data.length===0) {
-    tbody.innerHTML = '<tr><td colspan="14" style="text-align:center;color:var(--muted);padding:30px">'+(pTab==='changed'?'No price changes':'No SKUs')+'</td></tr>';
-    return;
-  }
-  tbody.innerHTML = data.map(function(s) {
-    return '<tr class="'+(s.diff==='Changed'?'changed-row':'')+'">'+
+  var data=pTab==='changed'?skus.filter(function(s){return s.diff==='changed';}):skus;
+  paginate(data,'pricing','t-pricing','pg-pricing',function(s){
+    var gmc=parseFloat(s.gpMin||0)>=0?'var(--success)':'var(--error)';
+    var gsc=parseFloat(s.gpSP||0)>=0?'var(--success)':'var(--error)';
+    return '<tr class="'+(s.diff==='changed'?'changed-row':'')+'">'+
       '<td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td>'+
       '<td>'+fmt(s.cog)+'</td><td>'+fmt(s.newCog||s.cog)+'</td>'+
-      '<td><span class="badge '+(s.diff==='Changed'?'b-e':'b-s')+'">'+s.diff+'</span></td>'+
+      '<td><span class="badge '+(s.diff==='changed'?'be':'bs')+'">'+s.diff+'</span></td>'+
       '<td>'+fmt(s.totalCog)+'</td><td>'+fmt(s.be)+'</td>'+
       '<td>'+fmt(s.minPrice)+'</td><td>'+fmt(s.sellerPrice)+'</td>'+
       '<td>'+fmt(s.maxPrice)+'</td><td>'+fmt(s.businessPrice)+'</td>'+
-      '<td style="color:'+(parseFloat(s.gpMin||0)>=0?'var(--success)':'var(--error)')+'">'+fmt(s.gpMin)+'</td>'+
-      '<td style="color:'+(parseFloat(s.gpSP||0)>=0?'var(--success)':'var(--error)')+'">'+fmt(s.gpSP)+'</td>'+
-      '<td><span class="badge '+(s.diff==='Changed'?'b-e':'b-m')+'">'+s.diff+'</span></td></tr>';
-  }).join('');
+      '<td style="color:'+gmc+'">'+fmt(s.gpMin)+'</td>'+
+      '<td style="color:'+gsc+'">'+fmt(s.gpSP)+'</td>'+
+      '<td><span class="badge '+(s.diff==='changed'?'be':'bm')+'">'+s.diff+'</span></td></tr>';
+  },pTab==='changed'?'no price changes':'no skus');
 }
 
-function switchPTab(t) {
-  pTab = t;
-  document.getElementById('itab-changed').classList.toggle('active', t==='changed');
-  document.getElementById('itab-all').classList.toggle('active', t==='all');
-  renderPricing();
+function switchPTab(t){
+  pTab=t;
+  document.getElementById('itab-c').classList.toggle('active',t==='changed');
+  document.getElementById('itab-a').classList.toggle('active',t==='all');
+  pages.pricing.page=1;renderPricing();
 }
 
+// =============================================
 // TIMER
-function startTimer() {
-  timerEnd = Date.now() + 3600000;
-  localStorage.setItem('pp_timer', timerEnd);
-  document.getElementById('timer-wrap').style.display = 'block';
-  document.getElementById('btn-dl-changed').disabled = false;
+// =============================================
+function startTimer(){
+  timerEnd=Date.now()+3600000;
+  localStorage.setItem('pp_timer',timerEnd);
+  document.getElementById('timer-wrap').style.display='block';
+  document.getElementById('btn-dlc').disabled=false;
   runTimer();
 }
 
-function checkTimer() {
-  if (timerEnd > Date.now()) {
-    document.getElementById('timer-wrap').style.display = 'block';
-    document.getElementById('btn-dl-changed').disabled = false;
+function checkTimer(){
+  if(timerEnd>Date.now()){
+    document.getElementById('timer-wrap').style.display='block';
+    document.getElementById('btn-dlc').disabled=false;
     runTimer();
   } else {
-    document.getElementById('timer-wrap').style.display = 'none';
-    if (timerEnd > 0) document.getElementById('btn-dl-changed').disabled = true;
+    document.getElementById('timer-wrap').style.display='none';
+    if(timerEnd>0) document.getElementById('btn-dlc').disabled=true;
   }
 }
 
-function runTimer() {
-  if (timerInterval) clearInterval(timerInterval);
-  timerInterval = setInterval(function() {
-    var r = timerEnd - Date.now();
-    if (r <= 0) { clearInterval(timerInterval); document.getElementById('timer-wrap').style.display='none'; document.getElementById('btn-dl-changed').disabled=true; return; }
-    var h=Math.floor(r/3600000), m=Math.floor((r%3600000)/60000), s=Math.floor((r%60000)/1000);
-    document.getElementById('timer-cd').textContent = pad(h)+':'+pad(m)+':'+pad(s);
-  }, 1000);
+function runTimer(){
+  if(timerInterval) clearInterval(timerInterval);
+  timerInterval=setInterval(function(){
+    var r=timerEnd-Date.now();
+    if(r<=0){clearInterval(timerInterval);document.getElementById('timer-wrap').style.display='none';document.getElementById('btn-dlc').disabled=true;return;}
+    var h=Math.floor(r/3600000),m=Math.floor((r%3600000)/60000),s=Math.floor((r%60000)/1000);
+    document.getElementById('timer-cd').textContent=pad(h)+':'+pad(m)+':'+pad(s);
+  },1000);
 }
-
 function pad(n){return n.toString().padStart(2,'0');}
 
+// =============================================
 // DOWNLOADS
-function dlChanged() {
-  if (timerEnd>0&&timerEnd<Date.now()){alert('Download window expired!');return;}
-  var ch = skus.filter(function(s){return s.diff==='Changed';});
-  if (ch.length===0){alert('No price changes!');return;}
-  var txt = 'sku\tminimum-seller-allowed-price\tprice\tmaximum-seller-allowed-price\tbusiness-price\n';
+// =============================================
+function dlChanged(){
+  if(timerEnd>0&&timerEnd<Date.now()){alert('download window expired!');return;}
+  var ch=skus.filter(function(s){return s.diff==='changed';});
+  if(ch.length===0){alert('no price changes!');return;}
+  var txt='sku\tminimum-seller-allowed-price\tprice\tmaximum-seller-allowed-price\tbusiness-price\n';
   ch.forEach(function(s){txt+=s.listedSku+'\t'+parseFloat(s.minPrice||0).toFixed(2)+'\t'+parseFloat(s.sellerPrice||0).toFixed(2)+'\t'+parseFloat(s.maxPrice||0).toFixed(2)+'\t'+parseFloat(s.businessPrice||0).toFixed(2)+'\n';});
   dlFile(txt,'changed_prices.txt','text/plain');
 }
 
-function dlAllPrices() {
-  if (skus.length===0){alert('No SKUs!');return;}
-  var txt = 'sku\tminimum-seller-allowed-price\tprice\tmaximum-seller-allowed-price\tbusiness-price\n';
+function dlAllPrices(){
+  if(skus.length===0){alert('no skus!');return;}
+  var txt='sku\tminimum-seller-allowed-price\tprice\tmaximum-seller-allowed-price\tbusiness-price\n';
   skus.forEach(function(s){txt+=s.listedSku+'\t'+parseFloat(s.minPrice||0).toFixed(2)+'\t'+parseFloat(s.sellerPrice||0).toFixed(2)+'\t'+parseFloat(s.maxPrice||0).toFixed(2)+'\t'+parseFloat(s.businessPrice||0).toFixed(2)+'\n';});
   dlFile(txt,'all_prices.txt','text/plain');
 }
 
-function dlStock() {
-  if (skus.length===0){alert('No SKUs!');return;}
-  var txt = 'sku\tquantity\n';
+function dlStock(){
+  if(skus.length===0){alert('no skus!');return;}
+  var txt='sku\tquantity\n';
   skus.forEach(function(s){txt+=s.listedSku+'\t'+(s.quantity||0)+'\n';});
   dlFile(txt,'inventory.txt','text/plain');
 }
 
-function dlFullCatalog() {
-  var h = ['Disti','Vendor','Disti SKU','MFR SKU','Listed SKU','ASIN','quantity','Cog','new Cog','Diff','Handling','Shipping','Weight','Total Cog','Refferal','BE','minimum-seller-allowed-price','price','maximum-seller-allowed-price','business-price','GP in Min','GP in SP','merchant_shipping_group_name'];
-  var rows = skus.map(function(s){return [s.disti,s.vendor,s.distiSku,s.mfrSku,s.listedSku,s.asin,s.quantity,s.cog,s.newCog,s.diff,s.handling,s.shipping,s.weight,s.totalCog,s.referral,s.be,s.minPrice,s.sellerPrice,s.maxPrice,s.businessPrice,s.gpMin,s.gpSP,s.shippingGroup];});
-  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Catalog');XLSX.writeFile(wb,'full_catalog.xlsx');
+function dlFullCatalog(){
+  var h=['disti','vendor','disti sku','mfr sku','listed sku','asin','quantity','cog','new cog','diff','handling','shipping','weight','total cog','referral','be','minimum-seller-allowed-price','price','maximum-seller-allowed-price','business-price','gp in min','gp in sp','merchant_shipping_group_name'];
+  var rows=skus.map(function(s){return [s.disti,s.vendor,s.distiSku,s.mfrSku,s.listedSku,s.asin,s.quantity,s.cog,s.newCog,s.diff,s.handling,s.shipping,s.weight,s.totalCog,s.referral+'%',s.be,s.minPrice,s.sellerPrice,s.maxPrice,s.businessPrice,s.gpMin,s.gpSP,s.shippingGroup];});
+  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'catalog');XLSX.writeFile(wb,'full_catalog.xlsx');
 }
 
-function dlPriceLog() {
-  var h=['Date/Time','Listed SKU','MFR SKU','Disti','Old COG','New COG'];
+function dlPriceLog(){
+  var h=['date/time','listed sku','mfr sku','disti','old cog','new cog'];
   var rows=priceLog.map(function(l){return [l.changedAt,l.listedSku,l.mfrSku,l.disti,l.oldCog,l.newCog];});
-  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Price Log');XLSX.writeFile(wb,'price_log.xlsx');
+  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'price log');XLSX.writeFile(wb,'price_log.xlsx');
 }
 
-function dlReservations() {
-  var h=['Disti','SKU','Quantity','Hold No 1','Hold No 2','Added'];
+function dlReservations(){
+  var h=['disti','sku','quantity','hold no 1','hold no 2','added'];
   var rows=reservations.map(function(r){return [r.disti,r.sku,r.qty,r.hold1,r.hold2,r.addedAt];});
-  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Reservations');XLSX.writeFile(wb,'reservations.xlsx');
+  var ws=XLSX.utils.aoa_to_sheet([h].concat(rows));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'reservations');XLSX.writeFile(wb,'reservations.xlsx');
 }
 
-function exportTemplate() {
-  var h=['Disti','Vendor','Disti SKU','MFR SKU','Listed SKU','ASIN','quantity','Cog','new Cog','Handling','Shipping','Weight','Length','Width','Height','Refferal','merchant_shipping_group_name'];
+function exportTemplate(){
+  var h=['disti','vendor','disti sku','mfr sku','listed sku','asin','quantity','cog','new cog','handling','shipping','weight','length','width','height','refferal','merchant_shipping_group_name'];
   var ex=[['MA Labs','Tripp Lite','TLP604','TLP604','ALG-TLP604','B0XXXXXXXX',10,18.54,18.54,2.00,3.50,1.5,11,2,2,8,'DEFAULT']];
-  var ws=XLSX.utils.aoa_to_sheet([h].concat(ex));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Template');XLSX.writeFile(wb,'sku_template.xlsx');
+  var ws=XLSX.utils.aoa_to_sheet([h].concat(ex));var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'template');XLSX.writeFile(wb,'sku_template.xlsx');
 }
 
-function dlResTemplate() {
-  var h=['Disti','SKU','Quantity','Hold No 1','Hold No 2'];
-  var ws=XLSX.utils.aoa_to_sheet([h]);var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'Template');XLSX.writeFile(wb,'reservation_template.xlsx');
+function dlResTemplate(){
+  var h=['disti','sku','quantity','hold no 1','hold no 2'];
+  var ws=XLSX.utils.aoa_to_sheet([h]);var wb=XLSX.utils.book_new();XLSX.utils.book_append_sheet(wb,ws,'template');XLSX.writeFile(wb,'reservation_template.xlsx');
 }
 
-function dlFile(content,filename,type) {
+function dlFile(content,filename,type){
   var blob=new Blob([content],{type:type});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=filename;a.click();
 }
 
+// =============================================
 // STOCK
-function renderStock() {
-  var tbody=document.getElementById('t-stock');
-  if (skus.length===0){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No stock data</td></tr>';return;}
-  tbody.innerHTML=skus.map(function(s){return '<tr class="'+(parseInt(s.quantity||0)<5?'lowstock-row':'')+'"><td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td><td><span class="badge '+(parseInt(s.quantity||0)<5?'b-e':'b-s')+'">'+s.quantity+'</span></td><td>'+(parseInt(s.quantity||0)<5?'<span class="badge b-e">Low Stock</span>':'<span class="badge b-s">OK</span>')+'</td><td style="color:var(--muted);font-size:10px">'+(s.updatedAt||'')+'</td></tr>';}).join('');
+// =============================================
+function renderStock(){
+  paginate(skus,'stock','t-stock','pg-stock',function(s){
+    return '<tr class="'+(parseInt(s.quantity||0)<5?'lowstock-row':'')+'">'+
+      '<td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td>'+
+      '<td><span class="badge '+(parseInt(s.quantity||0)<5?'be':'bs')+'">'+s.quantity+'</span></td>'+
+      '<td>'+(parseInt(s.quantity||0)<5?'<span class="badge bw">low stock</span>':'<span class="badge bs">ok</span>')+'</td>'+
+      '<td style="color:var(--muted);font-size:10px">'+(s.updatedAt||'')+'</td></tr>';
+  },'no stock data');
 }
 
+// =============================================
 // DELETE
-function openDel(lsku) { currentDelSku=lsku; document.getElementById('del-sku-show').value=lsku; document.getElementById('del-reason').value=''; openModal('modal-delete'); }
+// =============================================
+function openDel(lsku){currentDelSku=lsku;document.getElementById('del-sku-show').value=lsku;document.getElementById('del-reason').value='';openModal('modal-delete');}
 
-function confirmDelete() {
+function confirmDelete(){
   var reason=document.getElementById('del-reason').value;
-  if (!reason){alert('Select a reason!');return;}
+  if(!reason){alert('select a reason!');return;}
   var idx=skus.findIndex(function(s){return s.listedSku===currentDelSku;});
-  if (idx===-1) return;
+  if(idx===-1) return;
   var s=skus.splice(idx,1)[0];
-  s.deletionReason=reason; s.deletedAt=new Date().toLocaleString();
-  deletedSkus.push(s); save(); closeModal('modal-delete'); renderCatalog(null);
-  alert('✅ SKU deleted!');
+  s.deletionReason=reason;s.deletedAt=new Date().toLocaleString();
+  deletedSkus.push(s);save();closeModal('modal-delete');catalogFiltered=[...skus];renderCatalog();
+  alert('✅ sku deleted!');
 }
 
+// =============================================
 // DELETED
-function renderDeleted() {
-  var tbody=document.getElementById('t-deleted');
-  if (deletedSkus.length===0){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No deleted SKUs</td></tr>';return;}
-  tbody.innerHTML=deletedSkus.map(function(s,i){return '<tr><td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td><td><span class="badge b-e" style="white-space:normal">'+s.deletionReason+'</span></td><td style="color:var(--muted);font-size:10px">'+s.deletedAt+'</td><td><button class="btn btn-s" style="font-size:10px;padding:4px 10px" onclick="reactivate('+i+')">↩ Reactivate</button></td></tr>';}).join('');
+// =============================================
+function renderDeleted(){
+  paginate(deletedSkus,'deleted','t-deleted','pg-deleted',function(s,i){
+    var realIdx=deletedSkus.indexOf(s);
+    return '<tr>'+
+      '<td><input type="checkbox" class="del-chk" data-idx="'+realIdx+'"/></td>'+
+      '<td><strong>'+s.listedSku+'</strong></td><td>'+s.asin+'</td><td>'+s.disti+'</td><td>'+s.vendor+'</td>'+
+      '<td><span class="badge be" style="white-space:normal;font-size:9px">'+s.deletionReason+'</span></td>'+
+      '<td style="color:var(--muted);font-size:10px">'+s.deletedAt+'</td>'+
+      '<td><button class="btn btn-s" style="font-size:10px;padding:3px 8px" onclick="reactivate('+realIdx+')">↩ restore</button></td></tr>';
+  },'no deleted skus');
 }
 
-function reactivate(i) {
+function reactivate(i){
   var s=deletedSkus.splice(i,1)[0];
-  delete s.deletionReason; delete s.deletedAt;
-  s.updatedAt=new Date().toLocaleString(); calcAll(s); skus.push(s); save(); renderDeleted();
-  alert('✅ SKU reactivated!');
+  delete s.deletionReason;delete s.deletedAt;
+  s.updatedAt=new Date().toLocaleString();calcAll(s);skus.push(s);save();renderDeleted();
+  catalogFiltered=[...skus];
+  alert('✅ sku reactivated!');
 }
 
+function bulkRestore(){
+  if(!confirm('restore all '+deletedSkus.length+' deleted skus?')) return;
+  deletedSkus.forEach(function(s){delete s.deletionReason;delete s.deletedAt;s.updatedAt=new Date().toLocaleString();calcAll(s);skus.push(s);});
+  deletedSkus=[];save();renderDeleted();catalogFiltered=[...skus];
+  alert('✅ all skus restored!');
+}
+
+function restoreSelected(){
+  var checked=[...document.querySelectorAll('.del-chk:checked')].map(function(c){return parseInt(c.getAttribute('data-idx'));}).sort(function(a,b){return b-a;});
+  if(checked.length===0){alert('select skus to restore!');return;}
+  checked.forEach(function(i){
+    var s=deletedSkus.splice(i,1)[0];
+    delete s.deletionReason;delete s.deletedAt;s.updatedAt=new Date().toLocaleString();calcAll(s);skus.push(s);
+  });
+  save();renderDeleted();catalogFiltered=[...skus];
+  alert('✅ '+checked.length+' sku(s) restored!');
+}
+
+function toggleAllChk(chk){
+  document.querySelectorAll('.del-chk').forEach(function(c){c.checked=chk.checked;});
+}
+
+// =============================================
 // NOTES
-function openNote(lsku) { currentNoteSku=lsku; document.getElementById('note-sku-lbl').textContent=lsku; var s=skus.find(function(s){return s.listedSku===lsku;}); document.getElementById('note-txt').value=s?s.notes||'':''; openModal('modal-note'); }
+// =============================================
+function openNote(lsku){currentNoteSku=lsku;document.getElementById('note-lbl').textContent=lsku;var s=skus.find(function(s){return s.listedSku===lsku;});document.getElementById('note-txt').value=s?s.notes||'':'';openModal('modal-note');}
+function saveNote(){var s=skus.find(function(s){return s.listedSku===currentNoteSku;});if(s){s.notes=document.getElementById('note-txt').value;save();catalogFiltered=[...skus];renderCatalog();}closeModal('modal-note');}
 
-function saveNote() { var s=skus.find(function(s){return s.listedSku===currentNoteSku;}); if(s){s.notes=document.getElementById('note-txt').value;save();renderCatalog(null);} closeModal('modal-note'); }
-
+// =============================================
 // RESERVATIONS
-function renderReservations() {
-  var tbody=document.getElementById('t-res');
-  if (reservations.length===0){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No reservations</td></tr>';return;}
-  tbody.innerHTML=reservations.map(function(r,i){return '<tr><td>'+r.disti+'</td><td>'+r.sku+'</td><td>'+r.qty+'</td><td>'+r.hold1+'</td><td>'+r.hold2+'</td><td style="color:var(--muted);font-size:10px">'+r.addedAt+'</td><td><button class="btn btn-e" style="font-size:10px;padding:4px 8px" onclick="delRes('+i+')">🗑</button></td></tr>';}).join('');
+// =============================================
+function renderReservations(){
+  paginate(reservations,'res','t-res','pg-res',function(r,i){
+    var realIdx=reservations.indexOf(r);
+    return '<tr><td>'+r.disti+'</td><td>'+r.sku+'</td><td>'+r.qty+'</td><td>'+r.hold1+'</td><td>'+r.hold2+'</td><td style="color:var(--muted);font-size:10px">'+r.addedAt+'</td><td><button class="btn btn-e" style="font-size:10px;padding:3px 7px" onclick="delRes('+realIdx+')">🗑</button></td></tr>';
+  },'no reservations');
 }
 
-function saveRes() { var r={disti:document.getElementById('r-disti').value,sku:document.getElementById('r-sku').value,qty:document.getElementById('r-qty').value,hold1:document.getElementById('r-h1').value,hold2:document.getElementById('r-h2').value,addedAt:new Date().toLocaleString()}; if(!r.sku){alert('Enter SKU!');return;} reservations.push(r);save();closeModal('modal-addres');renderReservations(); }
+function saveRes(){
+  var r={disti:document.getElementById('r-disti').value,sku:document.getElementById('r-sku').value,qty:document.getElementById('r-qty').value,hold1:document.getElementById('r-h1').value,hold2:document.getElementById('r-h2').value,addedAt:new Date().toLocaleString()};
+  if(!r.sku){alert('enter sku!');return;}
+  reservations.push(r);save();closeModal('modal-addres');renderReservations();
+}
 
-function delRes(i) { if(!confirm('Delete?'))return; reservations.splice(i,1);save();renderReservations(); }
+function delRes(i){if(!confirm('delete?'))return;reservations.splice(i,1);save();renderReservations();}
 
-function uploadRes(input) { var file=input.files[0];if(!file)return;var reader=new FileReader();reader.onload=function(e){var wb=XLSX.read(e.target.result,{type:'binary'});var ws=wb.Sheets[wb.SheetNames[0]];var data=XLSX.utils.sheet_to_json(ws,{defval:''});data.forEach(function(row){reservations.push({disti:row['Disti']||'',sku:row['SKU']||'',qty:row['Quantity']||0,hold1:row['Hold No 1']||'',hold2:row['Hold No 2']||'',addedAt:new Date().toLocaleString()});});save();renderReservations();alert('✅ '+data.length+' reservations uploaded!');};reader.readAsBinaryString(file); }
+function uploadRes(input){
+  var file=input.files[0];if(!file)return;
+  var reader=new FileReader();
+  reader.onload=function(e){
+    var wb=XLSX.read(e.target.result,{type:'binary'});var ws=wb.Sheets[wb.SheetNames[0]];
+    var data=XLSX.utils.sheet_to_json(ws,{defval:''});
+    data.forEach(function(row){reservations.push({disti:row['Disti']||row['disti']||'',sku:row['SKU']||row['sku']||'',qty:row['Quantity']||row['quantity']||0,hold1:row['Hold No 1']||'',hold2:row['Hold No 2']||'',addedAt:new Date().toLocaleString()});});
+    save();renderReservations();alert('✅ '+data.length+' reservations uploaded!');
+  };
+  reader.readAsBinaryString(file);
+}
 
+// =============================================
 // PRICE LOG
-function renderPriceLog() {
-  var tbody=document.getElementById('t-pricelog');
-  if (priceLog.length===0){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No price changes logged</td></tr>';return;}
-  tbody.innerHTML=[...priceLog].reverse().map(function(l){var d=parseFloat(l.newCog)-parseFloat(l.oldCog);return '<tr><td style="color:var(--muted);font-size:10px">'+l.changedAt+'</td><td><strong>'+l.listedSku+'</strong></td><td>'+l.mfrSku+'</td><td>'+l.disti+'</td><td>'+fmt(l.oldCog)+'</td><td>'+fmt(l.newCog)+'</td><td><span class="badge '+(d>0?'b-e':'b-s')+'">'+d.toFixed(2)+'</span></td></tr>';}).join('');
+// =============================================
+function renderPriceLog(){
+  var data=[...priceLog].reverse();
+  paginate(data,'pricelog','t-pricelog','pg-pricelog',function(l){
+    var d=parseFloat(l.newCog)-parseFloat(l.oldCog);
+    return '<tr><td style="color:var(--muted);font-size:10px">'+l.changedAt+'</td><td><strong>'+l.listedSku+'</strong></td><td>'+l.mfrSku+'</td><td>'+l.disti+'</td><td>'+fmt(l.oldCog)+'</td><td>'+fmt(l.newCog)+'</td><td><span class="badge '+(d>0?'be':'bs')+'">'+d.toFixed(2)+'</span></td></tr>';
+  },'no price changes logged');
 }
 
-// ADD SINGLE
-function addSingle() {
+// =============================================
+// ADD SINGLE SKU
+// =============================================
+function addSingle(){
   var lsku=document.getElementById('a-lsku').value.trim();
-  if(!lsku){alert('Listed SKU required!');return;}
-  if(skus.find(function(s){return s.listedSku===lsku;})){alert('SKU already exists!');return;}
-  var nd={disti:document.getElementById('a-disti').value,vendor:document.getElementById('a-vendor').value,distiSku:document.getElementById('a-dsku').value,mfrSku:document.getElementById('a-msku').value,listedSku:lsku,asin:document.getElementById('a-asin').value,quantity:document.getElementById('a-qty').value||0,cog:parseFloat(document.getElementById('a-cog').value||0),newCog:parseFloat(document.getElementById('a-cog').value||0),handling:parseFloat(document.getElementById('a-handling').value||0),shipping:parseFloat(document.getElementById('a-shipping').value||0),referral:parseFloat(document.getElementById('a-reff').value||0),shippingGroup:document.getElementById('a-sg').value,notes:'',updatedAt:new Date().toLocaleString()};
-  calcAll(nd);skus.push(nd);save();alert('✅ SKU added!');
+  if(!lsku){alert('listed sku required!');return;}
+  if(skus.find(function(s){return s.listedSku===lsku;})){alert('sku already exists!');return;}
+  var reff=parseFloat(document.getElementById('a-reff').value||0);
+  var nd={disti:document.getElementById('a-disti').value,vendor:document.getElementById('a-vendor').value,distiSku:document.getElementById('a-dsku').value,mfrSku:document.getElementById('a-msku').value,listedSku:lsku,asin:document.getElementById('a-asin').value,quantity:document.getElementById('a-qty').value||0,cog:parseFloat(document.getElementById('a-cog').value||0),newCog:parseFloat(document.getElementById('a-cog').value||0),handling:parseFloat(document.getElementById('a-handling').value||0),shipping:parseFloat(document.getElementById('a-shipping').value||0),referral:reff,shippingGroup:document.getElementById('a-sg').value,notes:'',updatedAt:new Date().toLocaleString()};
+  calcAll(nd);skus.push(nd);save();catalogFiltered=[...skus];
+  alert('✅ sku added!');
   ['a-disti','a-vendor','a-dsku','a-msku','a-lsku','a-asin','a-qty','a-cog','a-handling','a-shipping','a-reff','a-sg'].forEach(function(id){document.getElementById(id).value='';});
 }
 
+// =============================================
 // MODAL HELPERS
+// =============================================
 function openModal(id){document.getElementById(id).classList.add('open');}
 function closeModal(id){document.getElementById(id).classList.remove('open');}
 document.addEventListener('keydown',function(e){if(e.key==='Escape')document.querySelectorAll('.modal-overlay.open').forEach(function(m){m.classList.remove('open');});});
 
 // INIT
-updateBadges();
-checkTimer();
-refreshDashboard();
+catalogFiltered=[...skus];
+updateBadges();checkTimer();refreshDashboard();
 </script>
 </body>
 </html>
