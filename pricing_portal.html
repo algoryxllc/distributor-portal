@@ -1,0 +1,1262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pricing Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root {
+  --bg: #07070f;
+  --surface: #0e0e1c;
+  --surface2: #13131f;
+  --border: #1e1e32;
+  --accent: #6366f1;
+  --accent2: #06b6d4;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --error: #ef4444;
+  --text: #e2e2f0;
+  --muted: #5a5a7a;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'DM Mono',monospace;min-height:100vh;overflow-x:hidden;font-size:13px;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(99,102,241,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(99,102,241,0.03) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0;}
+
+/* LAYOUT */
+.app{display:flex;min-height:100vh;position:relative;z-index:1;}
+
+/* SIDEBAR */
+.sidebar{width:220px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:100;}
+.sidebar-logo{padding:20px 16px;border-bottom:1px solid var(--border);}
+.sidebar-logo h1{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;color:var(--text);}
+.sidebar-logo h1 span{color:var(--accent);}
+.sidebar-logo p{font-size:10px;color:var(--muted);margin-top:2px;letter-spacing:1px;text-transform:uppercase;}
+.nav-items{flex:1;padding:12px 8px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;transition:all 0.2s;color:var(--muted);font-size:12px;margin-bottom:2px;border:1px solid transparent;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(99,102,241,0.12);color:var(--accent);border-color:rgba(99,102,241,0.2);}
+.nav-item .icon{font-size:14px;width:20px;text-align:center;}
+.nav-badge{margin-left:auto;background:var(--error);color:#fff;font-size:9px;padding:2px 6px;border-radius:10px;font-weight:700;}
+.nav-badge.green{background:var(--success);}
+.nav-badge.orange{background:var(--warning);}
+
+/* MAIN */
+.main{margin-left:220px;flex:1;padding:24px;}
+
+/* TOPBAR */
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.page-title{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;}
+.page-title span{color:var(--accent);}
+.topbar-actions{display:flex;gap:8px;}
+
+/* BUTTONS */
+.btn{padding:8px 16px;border-radius:8px;border:none;cursor:pointer;font-family:'Syne',sans-serif;font-size:12px;font-weight:600;transition:all 0.2s;display:inline-flex;align-items:center;gap:6px;}
+.btn-primary{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;}
+.btn-primary:hover{opacity:0.85;}
+.btn-primary:disabled{opacity:0.4;cursor:not-allowed;}
+.btn-success{background:rgba(16,185,129,0.15);color:var(--success);border:1px solid rgba(16,185,129,0.3);}
+.btn-success:hover{background:rgba(16,185,129,0.25);}
+.btn-warning{background:rgba(245,158,11,0.15);color:var(--warning);border:1px solid rgba(245,158,11,0.3);}
+.btn-warning:hover{background:rgba(245,158,11,0.25);}
+.btn-error{background:rgba(239,68,68,0.15);color:var(--error);border:1px solid rgba(239,68,68,0.3);}
+.btn-error:hover{background:rgba(239,68,68,0.25);}
+.btn-ghost{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+.btn-ghost:hover{color:var(--text);border-color:var(--accent);}
+
+/* CARDS */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;}
+.card-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:16px;}
+
+/* STAT CARDS */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:20px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px;}
+.stat-card .label{font-size:10px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:8px;}
+.stat-card .value{font-family:'Syne',sans-serif;font-size:24px;font-weight:800;}
+.stat-card .sub{font-size:10px;color:var(--muted);margin-top:4px;}
+.stat-card.accent .value{color:var(--accent);}
+.stat-card.success .value{color:var(--success);}
+.stat-card.warning .value{color:var(--warning);}
+.stat-card.error .value{color:var(--error);}
+
+/* TABLE */
+.table-wrap{overflow-x:auto;border-radius:10px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:11px;}
+thead tr{background:var(--surface2);border-bottom:1px solid var(--border);}
+th{padding:10px 12px;text-align:left;color:var(--muted);font-weight:600;letter-spacing:0.5px;white-space:nowrap;}
+td{padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:rgba(99,102,241,0.04);}
+.changed-row td{background:rgba(239,68,68,0.05);}
+.changed-row:hover td{background:rgba(239,68,68,0.08);}
+.lowstock-row td{background:rgba(245,158,11,0.05);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:4px;font-size:10px;font-weight:600;}
+.badge-success{background:rgba(16,185,129,0.1);color:var(--success);border:1px solid rgba(16,185,129,0.2);}
+.badge-error{background:rgba(239,68,68,0.1);color:var(--error);border:1px solid rgba(239,68,68,0.2);}
+.badge-warning{background:rgba(245,158,11,0.1);color:var(--warning);border:1px solid rgba(245,158,11,0.2);}
+.badge-muted{background:var(--surface2);color:var(--muted);border:1px solid var(--border);}
+
+/* FORMS */
+.form-group{margin-bottom:14px;}
+.form-group label{display:block;font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:5px;}
+.form-group input,.form-group select,.form-group textarea{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;transition:border-color 0.2s;}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--accent);}
+.form-group select option{background:var(--surface2);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;}
+
+/* SEARCH BAR */
+.search-bar{display:flex;gap:8px;margin-bottom:16px;}
+.search-bar input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 14px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;}
+.search-bar input:focus{border-color:var(--accent);}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(6px);z-index:1000;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:28px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;position:relative;}
+.modal h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:800;margin-bottom:6px;}
+.modal p{font-size:12px;color:var(--muted);margin-bottom:20px;line-height:1.6;}
+.modal-close{position:absolute;top:16px;right:16px;background:var(--surface2);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:14px;}
+.modal-close:hover{background:var(--error);border-color:var(--error);}
+.modal-actions{display:flex;gap:8px;margin-top:16px;justify-content:flex-end;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--border);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:16px;}
+.upload-zone:hover{border-color:var(--accent);background:rgba(99,102,241,0.04);}
+.upload-zone .icon{font-size:32px;margin-bottom:8px;}
+.upload-zone p{font-size:12px;color:var(--muted);}
+.upload-zone span{color:var(--accent);cursor:pointer;}
+
+/* TIMER */
+.timer-bar{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:8px;margin-bottom:12px;}
+.timer-text{font-size:12px;color:var(--warning);}
+.timer-countdown{font-family:'Syne',sans-serif;font-size:14px;font-weight:800;color:var(--warning);margin-left:auto;}
+
+/* TABS (inner) */
+.inner-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--surface2);padding:4px;border-radius:8px;width:fit-content;}
+.inner-tab{padding:6px 14px;border-radius:6px;cursor:pointer;font-size:11px;font-weight:600;color:var(--muted);transition:all 0.2s;}
+.inner-tab.active{background:var(--accent);color:#fff;}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* ALERTS */
+.alert{display:flex;align-items:center;gap:10px;padding:12px 16px;border-radius:8px;margin-bottom:12px;font-size:12px;}
+.alert-warning{background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);color:var(--warning);}
+.alert-success{background:rgba(16,185,129,0.1);border:1px solid rgba(16,185,129,0.2);color:var(--success);}
+.alert-error{background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);color:var(--error);}
+.alert-info{background:rgba(99,102,241,0.1);border:1px solid rgba(99,102,241,0.2);color:var(--accent);}
+
+/* NOTES */
+.note-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:6px 8px;color:var(--text);font-family:'DM Mono',monospace;font-size:11px;outline:none;resize:none;height:60px;}
+.note-input:focus{border-color:var(--accent);}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .sidebar{width:60px;}
+  .sidebar-logo p,.nav-item span{display:none;}
+  .nav-item{justify-content:center;padding:10px;}
+  .main{margin-left:60px;}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+  <div class="sidebar-logo">
+    <h1>PRICING<span>.</span></h1>
+    <p>Portal v1.0</p>
+  </div>
+  <div class="nav-items">
+    <div class="nav-item active" onclick="showPage('dashboard')"><span class="icon">📊</span><span>Dashboard</span></div>
+    <div class="nav-item" onclick="showPage('catalog')"><span class="icon">📋</span><span>SKU Catalog</span><span class="nav-badge green" id="badge-catalog">0</span></div>
+    <div class="nav-item" onclick="showPage('pricing')"><span class="icon">💰</span><span>Pricing</span><span class="nav-badge orange" id="badge-pricing">0</span></div>
+    <div class="nav-item" onclick="showPage('upload')"><span class="icon">⬆️</span><span>Bulk Upload</span></div>
+    <div class="nav-item" onclick="showPage('stock')"><span class="icon">📦</span><span>Stock</span></div>
+    <div class="nav-item" onclick="showPage('reservation')"><span class="icon">🔒</span><span>Reservation</span></div>
+    <div class="nav-item" onclick="showPage('pricelog')"><span class="icon">📈</span><span>Price Log</span></div>
+    <div class="nav-item" onclick="showPage('deleted')"><span class="icon">🗑️</span><span>Deleted SKUs</span><span class="nav-badge" id="badge-deleted">0</span></div>
+    <div class="nav-item" onclick="showPage('export')"><span class="icon">⬇️</span><span>Export All</span></div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- DASHBOARD PAGE -->
+<div class="page active" id="page-dashboard">
+  <div class="topbar">
+    <div class="page-title">Dashboard <span>Overview</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="refreshDashboard()">🔄 Refresh</button>
+    </div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card accent"><div class="label">Total SKUs</div><div class="value" id="stat-total">0</div><div class="sub">Active listings</div></div>
+    <div class="stat-card warning"><div class="label">Price Changes</div><div class="value" id="stat-changed">0</div><div class="sub">Since last fetch</div></div>
+    <div class="stat-card error"><div class="label">Low Stock</div><div class="value" id="stat-lowstock">0</div><div class="sub">Below 5 units</div></div>
+    <div class="stat-card success"><div class="label">Deleted SKUs</div><div class="value" id="stat-deleted">0</div><div class="sub">Total removed</div></div>
+    <div class="stat-card"><div class="label">Reservations</div><div class="value" id="stat-reservations">0</div><div class="sub">On hold</div></div>
+    <div class="stat-card"><div class="label">Last Fetch</div><div class="value" style="font-size:14px" id="stat-lastfetch">Never</div><div class="sub">Last updated</div></div>
+  </div>
+  <div class="card">
+    <div class="card-title">// Low Stock Alerts (Below 5 Units)</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Listed SKU</th><th>Disti SKU</th><th>Vendor</th><th>Quantity</th><th>Last Updated</th></tr></thead>
+        <tbody id="lowstock-table"><tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No low stock alerts</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">// Recent Price Changes</div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Listed SKU</th><th>MFR SKU</th><th>Old COG</th><th>New COG</th><th>Diff</th><th>Changed At</th></tr></thead>
+        <tbody id="recent-changes-table"><tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No recent changes</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- SKU CATALOG PAGE -->
+<div class="page" id="page-catalog">
+  <div class="topbar">
+    <div class="page-title">SKU <span>Catalog</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="exportTemplate()">⬇ Download Template</button>
+      <button class="btn btn-primary" onclick="document.getElementById('listing-file').click()">⬆ Upload Listing</button>
+      <input type="file" id="listing-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="uploadListing(this)"/>
+    </div>
+  </div>
+  <div class="search-bar">
+    <input type="text" placeholder="Search by SKU, ASIN, MFR SKU, Vendor..." id="catalog-search" oninput="filterCatalog()"/>
+    <select id="catalog-filter-disti" onchange="filterCatalog()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;">
+      <option value="">All Distributors</option>
+    </select>
+    <select id="catalog-filter-changed" onchange="filterCatalog()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'DM Mono',monospace;font-size:12px;outline:none;">
+      <option value="">All SKUs</option>
+      <option value="changed">Price Changed</option>
+      <option value="lowstock">Low Stock</option>
+    </select>
+  </div>
+  <div class="table-wrap">
+    <table id="catalog-table">
+      <thead>
+        <tr>
+          <th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Disti SKU</th><th>MFR SKU</th>
+          <th>Qty</th><th>COG</th><th>New COG</th><th>Diff</th><th>Handling</th><th>Shipping</th>
+          <th>Total COG</th><th>Referral%</th><th>BE</th><th>Min Price</th><th>Price</th>
+          <th>Max Price</th><th>Business Price</th><th>GP Min</th><th>GP SP</th>
+          <th>Shipping Group</th><th>Updated</th><th>Notes</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="catalog-tbody">
+        <tr><td colspan="25" style="text-align:center;color:var(--muted);padding:30px">No SKUs loaded. Upload a listing file to get started.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRICING PAGE -->
+<div class="page" id="page-pricing">
+  <div class="topbar">
+    <div class="page-title">Pricing <span>Manager</span></div>
+  </div>
+  <div id="pricing-timer-wrap" style="display:none">
+    <div class="timer-bar">
+      <span>⏳</span>
+      <span class="timer-text">Price download available for:</span>
+      <span class="timer-countdown" id="pricing-timer">01:00:00</span>
+    </div>
+  </div>
+  <div class="inner-tabs">
+    <div class="inner-tab active" onclick="switchPricingTab(this,'changed')">Changed SKUs</div>
+    <div class="inner-tab" onclick="switchPricingTab(this,'all')">All SKUs</div>
+  </div>
+  <div style="display:flex;gap:8px;margin-bottom:16px;">
+    <button class="btn btn-error" id="download-changed-btn" onclick="downloadPricingChanged()">⬇ Download Changed Prices</button>
+    <button class="btn btn-ghost" onclick="downloadPricingAll()">⬇ Download All Prices</button>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Listed SKU</th><th>ASIN</th><th>COG</th><th>New COG</th><th>Diff</th><th>Total COG</th><th>BE</th><th>Min Price</th><th>Price</th><th>Max Price</th><th>Business Price</th><th>GP Min</th><th>GP SP</th><th>Status</th></tr>
+      </thead>
+      <tbody id="pricing-tbody">
+        <tr><td colspan="14" style="text-align:center;color:var(--muted);padding:30px">No pricing data</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- BULK UPLOAD PAGE -->
+<div class="page" id="page-upload">
+  <div class="topbar">
+    <div class="page-title">Bulk <span>Upload</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="exportTemplate()">⬇ Download Template</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title">// Upload SKU Listing File</div>
+    <div class="alert alert-info">📌 Existing SKUs will be updated. New SKUs will be added. Weight/L/W/H only fills if currently empty.</div>
+    <div class="upload-zone" onclick="document.getElementById('bulk-file').click()">
+      <div class="icon">📂</div>
+      <p>Click to upload Excel file (.xlsx, .xls, .csv)</p>
+      <p>Headers: Disti, Vendor, Disti SKU, MFR SKU, Listed SKU, ASIN, Quantity, COG, Handling, Shipping, Weight, Referral, merchant_shipping_group_name</p>
+      <input type="file" id="bulk-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="uploadBulk(this)"/>
+    </div>
+    <div id="upload-result" style="display:none"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">// Add Single SKU Manually</div>
+    <div class="form-row">
+      <div class="form-group"><label>Disti</label><input type="text" id="add-disti" placeholder="MA Labs"/></div>
+      <div class="form-group"><label>Vendor</label><input type="text" id="add-vendor" placeholder="Tripp Lite"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Disti SKU</label><input type="text" id="add-disti-sku" placeholder="TLP604"/></div>
+      <div class="form-group"><label>MFR SKU</label><input type="text" id="add-mfr-sku" placeholder="TLP604"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Listed SKU</label><input type="text" id="add-listed-sku" placeholder="ALG-TLP604"/></div>
+      <div class="form-group"><label>ASIN</label><input type="text" id="add-asin" placeholder="B0XXXXXXXX"/></div>
+    </div>
+    <div class="form-row-3">
+      <div class="form-group"><label>COG ($)</label><input type="number" id="add-cog" placeholder="0.00" step="0.01"/></div>
+      <div class="form-group"><label>Handling ($)</label><input type="number" id="add-handling" placeholder="0.00" step="0.01"/></div>
+      <div class="form-group"><label>Shipping ($)</label><input type="number" id="add-shipping" placeholder="0.00" step="0.01"/></div>
+    </div>
+    <div class="form-row-3">
+      <div class="form-group"><label>Referral (%)</label><input type="number" id="add-referral" placeholder="15" step="0.1"/></div>
+      <div class="form-group"><label>Quantity</label><input type="number" id="add-qty" placeholder="0"/></div>
+      <div class="form-group"><label>Shipping Group</label><input type="text" id="add-shipping-group" placeholder="DEFAULT"/></div>
+    </div>
+    <button class="btn btn-primary" onclick="addSingleSKU()">+ Add SKU</button>
+  </div>
+</div>
+
+<!-- STOCK PAGE -->
+<div class="page" id="page-stock">
+  <div class="topbar">
+    <div class="page-title">Stock <span>Management</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-success" onclick="downloadStock()">⬇ Download Full Stock (TXT)</button>
+    </div>
+  </div>
+  <div class="alert alert-info">📌 Stock file downloads full catalog every time with headers: sku | quantity</div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Quantity</th><th>Status</th><th>Last Updated</th></tr></thead>
+      <tbody id="stock-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No stock data</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RESERVATION PAGE -->
+<div class="page" id="page-reservation">
+  <div class="topbar">
+    <div class="page-title">Reservation <span>Manager</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="exportReservationTemplate()">⬇ Download Template</button>
+      <button class="btn btn-primary" onclick="document.getElementById('res-file').click()">⬆ Upload Reservations</button>
+      <input type="file" id="res-file" accept=".xlsx,.xls,.csv" style="display:none" onchange="uploadReservation(this)"/>
+      <button class="btn btn-success" onclick="openAddReservation()">+ Add Reservation</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Disti</th><th>SKU</th><th>Quantity</th><th>Hold No 1</th><th>Hold No 2</th><th>Added</th><th>Actions</th></tr></thead>
+      <tbody id="reservation-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No reservations</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- PRICE LOG PAGE -->
+<div class="page" id="page-pricelog">
+  <div class="topbar">
+    <div class="page-title">Price Change <span>Log</span></div>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="clearPriceLog()">🗑 Clear Log</button>
+    </div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Date/Time</th><th>Listed SKU</th><th>MFR SKU</th><th>Disti</th><th>Old COG</th><th>New COG</th><th>Change</th><th>Min Price</th><th>Sell Price</th></tr></thead>
+      <tbody id="pricelog-tbody"><tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No price changes logged</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- DELETED SKUS PAGE -->
+<div class="page" id="page-deleted">
+  <div class="topbar">
+    <div class="page-title">Deleted <span>SKUs</span></div>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead><tr><th>Listed SKU</th><th>ASIN</th><th>Disti</th><th>Vendor</th><th>Deletion Reason</th><th>Deleted At</th><th>Actions</th></tr></thead>
+      <tbody id="deleted-tbody"><tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No deleted SKUs</td></tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- EXPORT PAGE -->
+<div class="page" id="page-export">
+  <div class="topbar">
+    <div class="page-title">Export <span>All</span></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;">
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">💰</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">Changed Prices</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Only SKUs with price changes<br/>TXT format · 1 hour timer</div>
+      <button class="btn btn-error" onclick="downloadPricingChanged()" style="width:100%">⬇ Download</button>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">📋</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">All Prices</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Full pricing catalog<br/>TXT format</div>
+      <button class="btn btn-primary" onclick="downloadPricingAll()" style="width:100%">⬇ Download</button>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">📦</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">Stock File</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Full stock catalog<br/>TXT format · sku + quantity</div>
+      <button class="btn btn-success" onclick="downloadStock()" style="width:100%">⬇ Download</button>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">📊</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">Full Catalog</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Complete SKU data<br/>Excel format</div>
+      <button class="btn btn-ghost" onclick="downloadFullCatalog()" style="width:100%">⬇ Download Excel</button>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">📈</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">Price Change Log</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">Full price history<br/>Excel format</div>
+      <button class="btn btn-ghost" onclick="downloadPriceLog()" style="width:100%">⬇ Download Excel</button>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:32px;margin-bottom:12px">🔒</div>
+      <div style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:6px">Reservations</div>
+      <div style="font-size:11px;color:var(--muted);margin-bottom:16px">All reserved inventory<br/>Excel format</div>
+      <button class="btn btn-ghost" onclick="downloadReservations()" style="width:100%">⬇ Download Excel</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- end main -->
+</div><!-- end app -->
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="delete-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('delete-modal')">✕</button>
+    <h2>🗑️ Delete SKU</h2>
+    <p>Select a reason for deleting this SKU. It will be moved to Deleted SKUs tab.</p>
+    <div class="form-group">
+      <label>SKU</label>
+      <input type="text" id="delete-sku-display" readonly style="background:var(--surface2);opacity:0.7"/>
+    </div>
+    <div class="form-group">
+      <label>Deletion Reason</label>
+      <select id="delete-reason">
+        <option value="">Select reason...</option>
+        <option>Suspected Intellectual Property Violations</option>
+        <option>Received Intellectual Property Complaints</option>
+        <option>Product Authenticity Customer Complaints</option>
+        <option>Product Condition Customer Complaints</option>
+        <option>Food and Product Safety Issues</option>
+        <option>Listing Policy Violations</option>
+        <option>Restricted Product Policy Violations</option>
+        <option>Customer Product Reviews Policy Violations</option>
+        <option>Other Policy Violations</option>
+        <option>Regulatory Compliance</option>
+      </select>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('delete-modal')">Cancel</button>
+      <button class="btn btn-error" onclick="confirmDelete()">Delete SKU</button>
+    </div>
+  </div>
+</div>
+
+<!-- NOTE MODAL -->
+<div class="modal-overlay" id="note-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('note-modal')">✕</button>
+    <h2>📝 Add Note</h2>
+    <p>Add an internal note for this SKU.</p>
+    <div class="form-group">
+      <label>SKU: <span id="note-sku-display"></span></label>
+      <textarea class="note-input" id="note-text" placeholder="Enter note..." style="height:100px;resize:vertical"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('note-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveNote()">Save Note</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD RESERVATION MODAL -->
+<div class="modal-overlay" id="add-reservation-modal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal('add-reservation-modal')">✕</button>
+    <h2>🔒 Add Reservation</h2>
+    <div class="form-row">
+      <div class="form-group"><label>Disti</label><input type="text" id="res-disti" placeholder="MA Labs"/></div>
+      <div class="form-group"><label>SKU</label><input type="text" id="res-sku" placeholder="Listed SKU"/></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Quantity</label><input type="number" id="res-qty" placeholder="0"/></div>
+      <div class="form-group"><label>Hold No 1</label><input type="text" id="res-hold1" placeholder="Hold #"/></div>
+    </div>
+    <div class="form-group"><label>Hold No 2</label><input type="text" id="res-hold2" placeholder="Hold #"/></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('add-reservation-modal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveReservation()">Add Reservation</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// =============================================
+// DATA STORE
+// =============================================
+let skus = JSON.parse(localStorage.getItem('pp_skus') || '[]');
+let deletedSkus = JSON.parse(localStorage.getItem('pp_deleted') || '[]');
+let priceLog = JSON.parse(localStorage.getItem('pp_pricelog') || '[]');
+let reservations = JSON.parse(localStorage.getItem('pp_reservations') || '[]');
+let pricingTimerEnd = parseInt(localStorage.getItem('pp_timer') || '0');
+let currentDeleteSku = null;
+let currentNoteSku = null;
+let pricingTab = 'changed';
+let timerInterval = null;
+
+function save() {
+  localStorage.setItem('pp_skus', JSON.stringify(skus));
+  localStorage.setItem('pp_deleted', JSON.stringify(deletedSkus));
+  localStorage.setItem('pp_pricelog', JSON.stringify(priceLog));
+  localStorage.setItem('pp_reservations', JSON.stringify(reservations));
+  updateBadges();
+}
+
+// =============================================
+// FORMULAS
+// =============================================
+function calcTotalCog(cog, handling, shipping) {
+  return parseFloat(cog||0) + parseFloat(handling||0) + parseFloat(shipping||0);
+}
+
+function calcBE(totalCog, reff) {
+  const r = parseFloat(reff||0) / 100;
+  if (r >= 1) return 0;
+  return (0.01 * totalCog) / (1 - r) * 100;
+}
+
+function calcMinPrice(be) {
+  const raw = be + be * 0.01;
+  return roundTo99(raw);
+}
+
+function calcSellerPrice(be) {
+  const raw = be + be * 0.02;
+  return roundTo99(raw);
+}
+
+function calcMaxPrice(sp) {
+  return roundTo99(sp * 2);
+}
+
+function calcBusinessPrice(sp) {
+  return sp;
+}
+
+function calcGPMin(minPrice, reff, totalCog) {
+  const r = parseFloat(reff||0) / 100;
+  return minPrice - minPrice * r - totalCog;
+}
+
+function calcGPSP(sp, reff, totalCog) {
+  const r = parseFloat(reff||0) / 100;
+  return sp - sp * r - totalCog;
+}
+
+function roundTo99(val) {
+  const floored = Math.ceil(val);
+  return parseFloat((floored - 0.01).toFixed(2));
+}
+
+function applyFormulas(sku) {
+  const cog = parseFloat(sku.newCog || sku.cog || 0);
+  const handling = parseFloat(sku.handling || 0);
+  const shipping = parseFloat(sku.shipping || 0);
+  const reff = parseFloat(sku.referral || 0);
+
+  sku.totalCog = calcTotalCog(cog, handling, shipping);
+  sku.be = calcBE(sku.totalCog, reff);
+  sku.minPrice = calcMinPrice(sku.be);
+  sku.sellerPrice = calcSellerPrice(sku.be);
+  sku.maxPrice = calcMaxPrice(sku.sellerPrice);
+  sku.businessPrice = calcBusinessPrice(sku.sellerPrice);
+  sku.gpMin = calcGPMin(sku.minPrice, reff, sku.totalCog);
+  sku.gpSP = calcGPSP(sku.sellerPrice, reff, sku.totalCog);
+  sku.diff = (parseFloat(sku.cog||0) === parseFloat(sku.newCog||sku.cog||0)) ? 'No Change' : 'Changed';
+  return sku;
+}
+
+// =============================================
+// PAGE NAVIGATION
+// =============================================
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  renderPage(name);
+}
+
+function renderPage(name) {
+  if (name === 'dashboard') refreshDashboard();
+  else if (name === 'catalog') renderCatalog();
+  else if (name === 'pricing') renderPricing();
+  else if (name === 'stock') renderStock();
+  else if (name === 'deleted') renderDeleted();
+  else if (name === 'pricelog') renderPriceLog();
+  else if (name === 'reservation') renderReservations();
+}
+
+// =============================================
+// DASHBOARD
+// =============================================
+function refreshDashboard() {
+  document.getElementById('stat-total').textContent = skus.length;
+  const changed = skus.filter(s => s.diff === 'Changed').length;
+  document.getElementById('stat-changed').textContent = changed;
+  const lowStock = skus.filter(s => parseInt(s.quantity||0) < 5 && parseInt(s.quantity||0) >= 0).length;
+  document.getElementById('stat-lowstock').textContent = lowStock;
+  document.getElementById('stat-deleted').textContent = deletedSkus.length;
+  document.getElementById('stat-reservations').textContent = reservations.length;
+  const lastFetch = localStorage.getItem('pp_lastfetch');
+  document.getElementById('stat-lastfetch').textContent = lastFetch || 'Never';
+
+  // Low stock table
+  const ls = skus.filter(s => parseInt(s.quantity||0) < 5);
+  const lsTbl = document.getElementById('lowstock-table');
+  if (ls.length === 0) {
+    lsTbl.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--muted);padding:20px">No low stock alerts ✅</td></tr>';
+  } else {
+    lsTbl.innerHTML = ls.map(s => `<tr class="lowstock-row">
+      <td>${s.listedSku||''}</td><td>${s.distiSku||''}</td><td>${s.vendor||''}</td>
+      <td><span class="badge badge-error">${s.quantity||0}</span></td>
+      <td>${s.updatedAt||''}</td>
+    </tr>`).join('');
+  }
+
+  // Recent changes
+  const rc = priceLog.slice(-10).reverse();
+  const rcTbl = document.getElementById('recent-changes-table');
+  if (rc.length === 0) {
+    rcTbl.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--muted);padding:20px">No recent changes</td></tr>';
+  } else {
+    rcTbl.innerHTML = rc.map(l => `<tr>
+      <td>${l.listedSku||''}</td><td>${l.mfrSku||''}</td>
+      <td>$${parseFloat(l.oldCog||0).toFixed(2)}</td>
+      <td>$${parseFloat(l.newCog||0).toFixed(2)}</td>
+      <td><span class="badge ${parseFloat(l.newCog) > parseFloat(l.oldCog) ? 'badge-error' : 'badge-success'}">${(parseFloat(l.newCog) - parseFloat(l.oldCog)).toFixed(2)}</span></td>
+      <td>${l.changedAt||''}</td>
+    </tr>`).join('');
+  }
+}
+
+function updateBadges() {
+  document.getElementById('badge-catalog').textContent = skus.length;
+  document.getElementById('badge-pricing').textContent = skus.filter(s => s.diff === 'Changed').length;
+  document.getElementById('badge-deleted').textContent = deletedSkus.length;
+}
+
+// =============================================
+// CATALOG
+// =============================================
+function renderCatalog(data) {
+  const rows = (data || skus);
+  const tbody = document.getElementById('catalog-tbody');
+  if (rows.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="25" style="text-align:center;color:var(--muted);padding:30px">No SKUs loaded.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = rows.map(s => {
+    const diffBadge = s.diff === 'Changed'
+      ? '<span class="badge badge-error">Changed</span>'
+      : '<span class="badge badge-success">No Change</span>';
+    const qtyBadge = parseInt(s.quantity||0) < 5
+      ? `<span class="badge badge-error">${s.quantity||0}</span>`
+      : `<span class="badge badge-success">${s.quantity||0}</span>`;
+
+    return `<tr class="${s.diff==='Changed'?'changed-row':''} ${parseInt(s.quantity||0)<5?'lowstock-row':''}">
+      <td><strong>${s.listedSku||''}</strong></td>
+      <td>${s.asin||''}</td>
+      <td>${s.disti||''}</td>
+      <td>${s.vendor||''}</td>
+      <td>${s.distiSku||''}</td>
+      <td>${s.mfrSku||''}</td>
+      <td>${qtyBadge}</td>
+      <td>$${parseFloat(s.cog||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.newCog||s.cog||0).toFixed(2)}</td>
+      <td>${diffBadge}</td>
+      <td>$${parseFloat(s.handling||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.shipping||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.totalCog||0).toFixed(2)}</td>
+      <td>${s.referral||0}%</td>
+      <td>$${parseFloat(s.be||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.minPrice||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.sellerPrice||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.maxPrice||0).toFixed(2)}</td>
+      <td>$${parseFloat(s.businessPrice||0).toFixed(2)}</td>
+      <td style="color:${parseFloat(s.gpMin||0)>=0?'var(--success)':'var(--error)'}">$${parseFloat(s.gpMin||0).toFixed(2)}</td>
+      <td style="color:${parseFloat(s.gpSP||0)>=0?'var(--success)':'var(--error)'}">$${parseFloat(s.gpSP||0).toFixed(2)}</td>
+      <td>${s.shippingGroup||''}</td>
+      <td style="color:var(--muted);font-size:10px">${s.updatedAt||''}</td>
+      <td style="max-width:120px;font-size:10px;color:var(--muted)">${s.notes||''}</td>
+      <td>
+        <div style="display:flex;gap:4px">
+          <button class="btn btn-ghost" style="padding:4px 8px;font-size:10px" onclick="openNoteModal('${s.listedSku}')">📝</button>
+          <button class="btn btn-error" style="padding:4px 8px;font-size:10px" onclick="openDeleteModal('${s.listedSku}')">🗑</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+
+  // Update disti filter
+  const distis = [...new Set(skus.map(s => s.disti).filter(Boolean))];
+  const distiFilter = document.getElementById('catalog-filter-disti');
+  const currentVal = distiFilter.value;
+  distiFilter.innerHTML = '<option value="">All Distributors</option>' + distis.map(d => `<option value="${d}" ${d===currentVal?'selected':''}>${d}</option>`).join('');
+}
+
+function filterCatalog() {
+  const q = document.getElementById('catalog-search').value.toLowerCase();
+  const disti = document.getElementById('catalog-filter-disti').value;
+  const filter = document.getElementById('catalog-filter-changed').value;
+
+  let filtered = skus.filter(s => {
+    const matchQ = !q || [s.listedSku,s.asin,s.mfrSku,s.distiSku,s.vendor,s.disti].some(v => (v||'').toLowerCase().includes(q));
+    const matchDisti = !disti || s.disti === disti;
+    const matchFilter = !filter ||
+      (filter === 'changed' && s.diff === 'Changed') ||
+      (filter === 'lowstock' && parseInt(s.quantity||0) < 5);
+    return matchQ && matchDisti && matchFilter;
+  });
+  renderCatalog(filtered);
+}
+
+// =============================================
+// UPLOAD LISTING
+// =============================================
+function uploadListing(input) { processFile(input.files[0], 'listing'); }
+function uploadBulk(input) { processFile(input.files[0], 'bulk'); }
+
+function processFile(file, mode) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const wb = XLSX.read(e.target.result, {type:'binary'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+
+    let added = 0, updated = 0, dupes = [];
+
+    data.forEach(row => {
+      const listedSku = (row['Listed SKU'] || row['listed sku'] || row['listed-sku'] || '').toString().trim();
+      const mfrSku = (row['MFR SKU'] || row['mfr sku'] || row['mfr-sku'] || '').toString().trim();
+      if (!listedSku && !mfrSku) return;
+
+      const existing = skus.find(s => s.listedSku === listedSku);
+      const newData = {
+        disti: row['Disti'] || row['disti'] || '',
+        vendor: row['Vendor'] || row['vendor'] || '',
+        distiSku: row['Disti SKU'] || row['disti sku'] || row['Disti SKU'] || '',
+        mfrSku: mfrSku,
+        listedSku: listedSku,
+        asin: row['ASIN'] || row['asin'] || '',
+        quantity: row['quantity'] || row['Quantity'] || 0,
+        cog: parseFloat(row['Cog'] || row['COG'] || row['cog'] || 0),
+        newCog: parseFloat(row['new Cog'] || row['New COG'] || row['newCog'] || row['Cog'] || row['COG'] || 0),
+        handling: parseFloat(row['Handling'] || row['handling'] || 0),
+        shipping: parseFloat(row['Shipping'] || row['shipping'] || 0),
+        referral: parseFloat(row['Refferal'] || row['Referral'] || row['referral'] || 0),
+        shippingGroup: row['merchant_shipping_group_name'] || row['Shipping Group'] || '',
+        updatedAt: new Date().toLocaleString()
+      };
+
+      // Weight/dimensions — only fill if empty
+      const weight = row['Weight'] || row['weight'] || '';
+      const length = row['Length'] || row['length'] || '';
+      const width = row['Width'] || row['width'] || '';
+      const height = row['Height'] || row['height'] || '';
+
+      if (existing) {
+        // Check duplicate ASIN
+        const asinCheck = skus.find(s => s.asin === newData.asin && s.listedSku !== listedSku);
+        if (asinCheck) dupes.push(listedSku);
+
+        // Log price change
+        if (parseFloat(existing.cog) !== parseFloat(newData.newCog) && parseFloat(newData.newCog) > 0) {
+          priceLog.push({
+            changedAt: new Date().toLocaleString(),
+            listedSku: listedSku,
+            mfrSku: mfrSku,
+            disti: newData.disti,
+            oldCog: existing.cog,
+            newCog: newData.newCog,
+            oldMin: existing.minPrice,
+            oldSP: existing.sellerPrice
+          });
+        }
+
+        Object.assign(existing, newData);
+        if (!existing.weight && weight) existing.weight = weight;
+        if (!existing.length && length) existing.length = length;
+        if (!existing.width && width) existing.width = width;
+        if (!existing.height && height) existing.height = height;
+        applyFormulas(existing);
+        updated++;
+      } else {
+        newData.weight = weight;
+        newData.length = length;
+        newData.width = width;
+        newData.height = height;
+        newData.notes = '';
+        applyFormulas(newData);
+        skus.push(newData);
+        added++;
+      }
+    });
+
+    localStorage.setItem('pp_lastfetch', new Date().toLocaleString());
+    save();
+    renderCatalog();
+
+    // Start 1 hour timer if any price changes
+    const changed = skus.filter(s => s.diff === 'Changed').length;
+    if (changed > 0) startPricingTimer();
+
+    let msg = `✅ Done! Added: ${added}, Updated: ${updated}`;
+    if (dupes.length > 0) msg += `
+⚠️ Duplicate ASINs detected: ${dupes.join(', ')}`;
+
+    const resultDiv = document.getElementById('upload-result');
+    if (resultDiv) {
+      resultDiv.style.display = 'block';
+      resultDiv.innerHTML = `<div class="alert alert-success">${msg}</div>`;
+    }
+    alert(msg);
+  };
+  reader.readAsBinaryString(file);
+}
+
+// =============================================
+// PRICING
+// =============================================
+function renderPricing() {
+  checkPricingTimer();
+  const tbody = document.getElementById('pricing-tbody');
+  const data = pricingTab === 'changed' ? skus.filter(s => s.diff === 'Changed') : skus;
+
+  if (data.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="14" style="text-align:center;color:var(--muted);padding:30px">${pricingTab==='changed'?'No price changes detected':'No SKUs loaded'}</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = data.map(s => `<tr class="${s.diff==='Changed'?'changed-row':''}">
+    <td><strong>${s.listedSku||''}</strong></td>
+    <td>${s.asin||''}</td>
+    <td>$${parseFloat(s.cog||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.newCog||s.cog||0).toFixed(2)}</td>
+    <td><span class="badge ${s.diff==='Changed'?'badge-error':'badge-success'}">${s.diff||'No Change'}</span></td>
+    <td>$${parseFloat(s.totalCog||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.be||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.minPrice||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.sellerPrice||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.maxPrice||0).toFixed(2)}</td>
+    <td>$${parseFloat(s.businessPrice||0).toFixed(2)}</td>
+    <td style="color:${parseFloat(s.gpMin||0)>=0?'var(--success)':'var(--error)'}">$${parseFloat(s.gpMin||0).toFixed(2)}</td>
+    <td style="color:${parseFloat(s.gpSP||0)>=0?'var(--success)':'var(--error)'}">$${parseFloat(s.gpSP||0).toFixed(2)}</td>
+    <td><span class="badge ${s.diff==='Changed'?'badge-error':'badge-muted'}">${s.diff||'No Change'}</span></td>
+  </tr>`).join('');
+}
+
+function switchPricingTab(el, tab) {
+  document.querySelectorAll('.inner-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  pricingTab = tab;
+  renderPricing();
+}
+
+// =============================================
+// PRICING TIMER
+// =============================================
+function startPricingTimer() {
+  pricingTimerEnd = Date.now() + 3600000; // 1 hour
+  localStorage.setItem('pp_timer', pricingTimerEnd);
+  document.getElementById('pricing-timer-wrap').style.display = 'block';
+  document.getElementById('download-changed-btn').disabled = false;
+  runTimer();
+}
+
+function checkPricingTimer() {
+  if (pricingTimerEnd > Date.now()) {
+    document.getElementById('pricing-timer-wrap').style.display = 'block';
+    document.getElementById('download-changed-btn').disabled = false;
+    runTimer();
+  } else {
+    document.getElementById('pricing-timer-wrap').style.display = 'none';
+    if (pricingTimerEnd > 0) document.getElementById('download-changed-btn').disabled = true;
+  }
+}
+
+function runTimer() {
+  if (timerInterval) clearInterval(timerInterval);
+  timerInterval = setInterval(() => {
+    const remaining = pricingTimerEnd - Date.now();
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+      document.getElementById('pricing-timer-wrap').style.display = 'none';
+      document.getElementById('download-changed-btn').disabled = true;
+      return;
+    }
+    const h = Math.floor(remaining / 3600000);
+    const m = Math.floor((remaining % 3600000) / 60000);
+    const s = Math.floor((remaining % 60000) / 1000);
+    document.getElementById('pricing-timer').textContent =
+      `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+  }, 1000);
+}
+
+// =============================================
+// DOWNLOADS
+// =============================================
+function downloadPricingChanged() {
+  if (pricingTimerEnd > 0 && pricingTimerEnd < Date.now()) {
+    alert('Download window expired. Fetch new data to get fresh changes.');
+    return;
+  }
+  const changed = skus.filter(s => s.diff === 'Changed');
+  if (changed.length === 0) { alert('No price changes to download.'); return; }
+
+  let txt = 'sku	minimum-seller-allowed-price	price	maximum-seller-allowed-price	business-price
+';
+  changed.forEach(s => {
+    txt += `${s.listedSku}	${parseFloat(s.minPrice||0).toFixed(2)}	${parseFloat(s.sellerPrice||0).toFixed(2)}	${parseFloat(s.maxPrice||0).toFixed(2)}	${parseFloat(s.businessPrice||0).toFixed(2)}
+`;
+  });
+  downloadFile(txt, 'changed_prices.txt', 'text/plain');
+}
+
+function downloadPricingAll() {
+  if (skus.length === 0) { alert('No SKUs loaded.'); return; }
+  let txt = 'sku	minimum-seller-allowed-price	price	maximum-seller-allowed-price	business-price
+';
+  skus.forEach(s => {
+    txt += `${s.listedSku}	${parseFloat(s.minPrice||0).toFixed(2)}	${parseFloat(s.sellerPrice||0).toFixed(2)}	${parseFloat(s.maxPrice||0).toFixed(2)}	${parseFloat(s.businessPrice||0).toFixed(2)}
+`;
+  });
+  downloadFile(txt, 'all_prices.txt', 'text/plain');
+}
+
+function downloadStock() {
+  if (skus.length === 0) { alert('No SKUs loaded.'); return; }
+  let txt = 'sku	quantity
+';
+  skus.forEach(s => { txt += `${s.listedSku}	${s.quantity||0}
+`; });
+  downloadFile(txt, 'inventory.txt', 'text/plain');
+}
+
+function downloadFullCatalog() {
+  const headers = ['Disti','Vendor','Disti SKU','MFR SKU','Listed SKU','ASIN','quantity','Cog','new Cog','Diff','Handling','Shipping','Weight','Total Cog','Refferal','BE','minimum-seller-allowed-price','price','maximum-seller-allowed-price','business-price','GP in Min','GP in SP','merchant_shipping_group_name'];
+  const rows = skus.map(s => [s.disti,s.vendor,s.distiSku,s.mfrSku,s.listedSku,s.asin,s.quantity,s.cog,s.newCog,s.diff,s.handling,s.shipping,s.weight,s.totalCog,s.referral,s.be,s.minPrice,s.sellerPrice,s.maxPrice,s.businessPrice,s.gpMin,s.gpSP,s.shippingGroup]);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Catalog');
+  XLSX.writeFile(wb, 'full_catalog.xlsx');
+}
+
+function downloadPriceLog() {
+  const headers = ['Date/Time','Listed SKU','MFR SKU','Disti','Old COG','New COG','Min Price','Sell Price'];
+  const rows = priceLog.map(l => [l.changedAt,l.listedSku,l.mfrSku,l.disti,l.oldCog,l.newCog,l.oldMin,l.oldSP]);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Price Log');
+  XLSX.writeFile(wb, 'price_log.xlsx');
+}
+
+function downloadReservations() {
+  const headers = ['Disti','SKU','Quantity','Hold No 1','Hold No 2','Added'];
+  const rows = reservations.map(r => [r.disti,r.sku,r.qty,r.hold1,r.hold2,r.addedAt]);
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...rows]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Reservations');
+  XLSX.writeFile(wb, 'reservations.xlsx');
+}
+
+function exportTemplate() {
+  const headers = ['Disti','Vendor','Disti SKU','MFR SKU','Listed SKU','ASIN','quantity','Cog','new Cog','Handling','Shipping','Weight','Length','Width','Height','Refferal','merchant_shipping_group_name'];
+  const ws = XLSX.utils.aoa_to_sheet([headers, ['MA Labs','Tripp Lite','TLP604','TLP604','ALG-TLP604','B0XXXXXXXX',10,18.54,18.54,2.00,3.50,1.5,11,2,2,8,'DEFAULT']]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Template');
+  XLSX.writeFile(wb, 'sku_template.xlsx');
+}
+
+function exportReservationTemplate() {
+  const headers = ['Disti','SKU','Quantity','Hold No 1','Hold No 2'];
+  const ws = XLSX.utils.aoa_to_sheet([headers]);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'Reservations');
+  XLSX.writeFile(wb, 'reservation_template.xlsx');
+}
+
+function downloadFile(content, filename, type) {
+  const blob = new Blob([content], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = filename;
+  a.click();
+}
+
+// =============================================
+// STOCK
+// =============================================
+function renderStock() {
+  const tbody = document.getElementById('stock-tbody');
+  if (skus.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No stock data</td></tr>'; return; }
+  tbody.innerHTML = skus.map(s => `<tr class="${parseInt(s.quantity||0)<5?'lowstock-row':''}">
+    <td><strong>${s.listedSku||''}</strong></td>
+    <td>${s.asin||''}</td>
+    <td>${s.disti||''}</td>
+    <td>${s.vendor||''}</td>
+    <td><span class="badge ${parseInt(s.quantity||0)<5?'badge-error':'badge-success'}">${s.quantity||0}</span></td>
+    <td>${parseInt(s.quantity||0)<5?'<span class="badge badge-error">Low Stock</span>':'<span class="badge badge-success">OK</span>'}</td>
+    <td style="color:var(--muted);font-size:10px">${s.updatedAt||''}</td>
+  </tr>`).join('');
+}
+
+// =============================================
+// DELETE
+// =============================================
+function openDeleteModal(listedSku) {
+  currentDeleteSku = listedSku;
+  document.getElementById('delete-sku-display').value = listedSku;
+  document.getElementById('delete-reason').value = '';
+  document.getElementById('delete-modal').classList.add('open');
+}
+
+function confirmDelete() {
+  const reason = document.getElementById('delete-reason').value;
+  if (!reason) { alert('Please select a deletion reason!'); return; }
+  const idx = skus.findIndex(s => s.listedSku === currentDeleteSku);
+  if (idx === -1) return;
+  const sku = skus.splice(idx, 1)[0];
+  sku.deletionReason = reason;
+  sku.deletedAt = new Date().toLocaleString();
+  deletedSkus.push(sku);
+  save();
+  closeModal('delete-modal');
+  renderCatalog();
+  alert(`✅ SKU "${currentDeleteSku}" deleted successfully.`);
+}
+
+// =============================================
+// DELETED SKUS
+// =============================================
+function renderDeleted() {
+  const tbody = document.getElementById('deleted-tbody');
+  if (deletedSkus.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No deleted SKUs</td></tr>'; return; }
+  tbody.innerHTML = deletedSkus.map((s,i) => `<tr>
+    <td><strong>${s.listedSku||''}</strong></td>
+    <td>${s.asin||''}</td>
+    <td>${s.disti||''}</td>
+    <td>${s.vendor||''}</td>
+    <td><span class="badge badge-error" style="white-space:normal;max-width:200px">${s.deletionReason||''}</span></td>
+    <td style="color:var(--muted);font-size:10px">${s.deletedAt||''}</td>
+    <td><button class="btn btn-success" style="font-size:10px;padding:4px 10px" onclick="reactivateSku(${i})">↩ Reactivate</button></td>
+  </tr>`).join('');
+}
+
+function reactivateSku(idx) {
+  const sku = deletedSkus.splice(idx, 1)[0];
+  delete sku.deletionReason;
+  delete sku.deletedAt;
+  sku.updatedAt = new Date().toLocaleString();
+  applyFormulas(sku);
+  skus.push(sku);
+  save();
+  renderDeleted();
+  alert(`✅ SKU "${sku.listedSku}" reactivated!`);
+}
+
+// =============================================
+// NOTES
+// =============================================
+function openNoteModal(listedSku) {
+  currentNoteSku = listedSku;
+  const sku = skus.find(s => s.listedSku === listedSku);
+  document.getElementById('note-sku-display').textContent = listedSku;
+  document.getElementById('note-text').value = sku?.notes || '';
+  document.getElementById('note-modal').classList.add('open');
+}
+
+function saveNote() {
+  const sku = skus.find(s => s.listedSku === currentNoteSku);
+  if (sku) { sku.notes = document.getElementById('note-text').value; save(); renderCatalog(); }
+  closeModal('note-modal');
+}
+
+// =============================================
+// RESERVATIONS
+// =============================================
+function renderReservations() {
+  const tbody = document.getElementById('reservation-tbody');
+  if (reservations.length === 0) { tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--muted);padding:30px">No reservations</td></tr>'; return; }
+  tbody.innerHTML = reservations.map((r,i) => `<tr>
+    <td>${r.disti||''}</td><td>${r.sku||''}</td><td>${r.qty||0}</td>
+    <td>${r.hold1||''}</td><td>${r.hold2||''}</td>
+    <td style="color:var(--muted);font-size:10px">${r.addedAt||''}</td>
+    <td><button class="btn btn-error" style="font-size:10px;padding:4px 8px" onclick="deleteReservation(${i})">🗑</button></td>
+  </tr>`).join('');
+}
+
+function openAddReservation() { document.getElementById('add-reservation-modal').classList.add('open'); }
+
+function saveReservation() {
+  const r = {
+    disti: document.getElementById('res-disti').value,
+    sku: document.getElementById('res-sku').value,
+    qty: document.getElementById('res-qty').value,
+    hold1: document.getElementById('res-hold1').value,
+    hold2: document.getElementById('res-hold2').value,
+    addedAt: new Date().toLocaleString()
+  };
+  if (!r.sku) { alert('Please enter a SKU!'); return; }
+  reservations.push(r);
+  save();
+  closeModal('add-reservation-modal');
+  renderReservations();
+}
+
+function deleteReservation(idx) {
+  if (!confirm('Delete this reservation?')) return;
+  reservations.splice(idx, 1);
+  save();
+  renderReservations();
+}
+
+function uploadReservation(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const wb = XLSX.read(e.target.result, {type:'binary'});
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, {defval:''});
+    data.forEach(row => {
+      reservations.push({
+        disti: row['Disti']||'',
+        sku: row['SKU']||'',
+        qty: row['Quantity']||0,
+        hold1: row['Hold No 1']||'',
+        hold2: row['Hold No 2']||'',
+        addedAt: new Date().toLocaleString()
+      });
+    });
+    save();
+    renderReservations();
+    alert(`✅ ${data.length} reservations uploaded!`);
+  };
+  reader.readAsBinaryString(file);
+}
+
+// =============================================
+// PRICE LOG
+// =============================================
+function renderPriceLog() {
+  const tbody = document.getElementById('pricelog-tbody');
+  if (priceLog.length === 0) { tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--muted);padding:30px">No price changes logged</td></tr>'; return; }
+  tbody.innerHTML = [...priceLog].reverse().map(l => `<tr>
+    <td style="color:var(--muted);font-size:10px">${l.changedAt||''}</td>
+    <td><strong>${l.listedSku||''}</strong></td>
+    <td>${l.mfrSku||''}</td>
+    <td>${l.disti||''}</td>
+    <td>$${parseFloat(l.oldCog||0).toFixed(2)}</td>
+    <td>$${parseFloat(l.newCog||0).toFixed(2)}</td>
+    <td><span class="badge ${parseFloat(l.newCog)>parseFloat(l.oldCog)?'badge-error':'badge-success'}">${(parseFloat(l.newCog)-parseFloat(l.oldCog)).toFixed(2)}</span></td>
+    <td>$${parseFloat(l.oldMin||0).toFixed(2)}</td>
+    <td>$${parseFloat(l.oldSP||0).toFixed(2)}</td>
+  </tr>`).join('');
+}
+
+function clearPriceLog() {
+  if (!confirm('Clear all price log history?')) return;
+  priceLog = [];
+  save();
+  renderPriceLog();
+}
+
+// =============================================
+// ADD SINGLE SKU
+// =============================================
+function addSingleSKU() {
+  const listedSku = document.getElementById('add-listed-sku').value.trim();
+  if (!listedSku) { alert('Listed SKU is required!'); return; }
+  if (skus.find(s => s.listedSku === listedSku)) { alert('SKU already exists!'); return; }
+  const newSku = {
+    disti: document.getElementById('add-disti').value,
+    vendor: document.getElementById('add-vendor').value,
+    distiSku: document.getElementById('add-disti-sku').value,
+    mfrSku: document.getElementById('add-mfr-sku').value,
+    listedSku,
+    asin: document.getElementById('add-asin').value,
+    quantity: document.getElementById('add-qty').value || 0,
+    cog: parseFloat(document.getElementById('add-cog').value || 0),
+    newCog: parseFloat(document.getElementById('add-cog').value || 0),
+    handling: parseFloat(document.getElementById('add-handling').value || 0),
+    shipping: parseFloat(document.getElementById('add-shipping').value || 0),
+    referral: parseFloat(document.getElementById('add-referral').value || 0),
+    shippingGroup: document.getElementById('add-shipping-group').value,
+    notes: '',
+    updatedAt: new Date().toLocaleString()
+  };
+  applyFormulas(newSku);
+  skus.push(newSku);
+  save();
+  alert(`✅ SKU "${listedSku}" added!`);
+  document.querySelectorAll('#page-upload input').forEach(i => i.value = '');
+}
+
+// =============================================
+// HELPERS
+// =============================================
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+// Init
+updateBadges();
+checkPricingTimer();
+refreshDashboard();
+</script>
+</body>
+</html>
