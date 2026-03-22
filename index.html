@@ -499,8 +499,8 @@
       ⚡ Fetch All Distributors
     </button>
     <div class="fetch-all-desc">
-      Fetches all distributors simultaneously.<br>
-      Arrow Electronics/Avnet requires SKUs — use individual fetch.
+      Fetches MA Labs + 888VoIP simultaneously.<br>
+      Arrow Electronics requires SKUs — use individual fetch.
     </div>
   </div>
 
@@ -768,8 +768,7 @@
   }
 
   async function fetchAll() {
-    const token = prompt("🔑 Enter your GitHub Personal Access Token:
-(Used for all distributors this session)");
+    const token = prompt("🔑 Enter your GitHub Personal Access Token (used for all distributors):");
     if (!token) return;
 
     const btn = document.getElementById("fetch-all-btn");
@@ -797,8 +796,7 @@
 
   function updateCount() {
     const text = document.getElementById("sku-input").value;
-    const skus = text.split("
-").filter(s => s.trim());
+    const skus = text.split("\n").filter(s => s.trim());
     document.getElementById("sku-count").textContent = `${skus.length} SKUs entered`;
   }
 
